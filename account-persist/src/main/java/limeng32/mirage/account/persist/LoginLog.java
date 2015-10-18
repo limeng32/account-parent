@@ -1,12 +1,52 @@
 package limeng32.mirage.account.persist;
 
-public class LoginLog {
+import java.io.Serializable;
 
-	public int id;
-	public java.util.Date loginTime;
-	public java.lang.String loginIP;
+import limeng32.mirage.util.pojo.PojoSupport;
+import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.FieldMapperAnnotation;
+import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.TableMapperAnnotation;
 
-	public Account account;
+import org.apache.ibatis.type.JdbcType;
+
+@TableMapperAnnotation(tableName = "loginLog")
+public class LoginLog extends PojoSupport<LoginLog> implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@FieldMapperAnnotation(dbFieldName = "id", jdbcType = JdbcType.INTEGER, isUniqueKey = true)
+	private Integer id;
+
+	private java.util.Date loginTime;
+
+	@FieldMapperAnnotation(dbFieldName = "loginIP", jdbcType = JdbcType.VARCHAR)
+	private java.lang.String loginIP;
+
+	@FieldMapperAnnotation(dbFieldName = "accountid", jdbcType = JdbcType.INTEGER, dbAssociationUniqueKey = "id")
+	private Account account;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public java.util.Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(java.util.Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public java.lang.String getLoginIP() {
+		return loginIP;
+	}
+
+	public void setLoginIP(java.lang.String loginIP) {
+		this.loginIP = loginIP;
+	}
 
 	public Account getAccount() {
 		return account;
@@ -24,6 +64,38 @@ public class LoginLog {
 				this.account.addLoginLog(this);
 			}
 		}
+	}
+
+	@Override
+	public boolean equalsExactly(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LoginLog other = (LoginLog) obj;
+		if (account == null) {
+			if (other.account != null)
+				return false;
+		} else if (!account.equals(other.account))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (loginIP == null) {
+			if (other.loginIP != null)
+				return false;
+		} else if (!loginIP.equals(other.loginIP))
+			return false;
+		if (loginTime == null) {
+			if (other.loginTime != null)
+				return false;
+		} else if (!loginTime.equals(other.loginTime))
+			return false;
+		return true;
 	}
 
 }

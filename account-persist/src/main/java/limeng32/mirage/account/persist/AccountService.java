@@ -1,7 +1,8 @@
 package limeng32.mirage.account.persist;
 
-import java.util.List;
+import java.util.Collection;
 
+import limeng32.mirage.account.persist.mapper.AccountMapper;
 import limeng32.mirage.util.service.ServiceSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class AccountService extends ServiceSupport<Account> implements
 
 	@Autowired
 	private AccountMapper mapper;
+
+	@Autowired
+	private LoginLogService loginLogService;
 
 	@Override
 	public Account select(int id) {
@@ -30,7 +34,7 @@ public class AccountService extends ServiceSupport<Account> implements
 	}
 
 	@Override
-	public List<Account> selectAll(Account t) {
+	public Collection<Account> selectAll(Account t) {
 		return supportSelectAll(mapper, t);
 	}
 
@@ -57,5 +61,11 @@ public class AccountService extends ServiceSupport<Account> implements
 	@Override
 	public int count(Account t) {
 		return supportCount(mapper, t);
+	}
+
+	@Override
+	public void loadLoginLog(Account account, LoginLog loginLog) {
+		loginLog.setAccount(account);
+		account.setLoginLog(loginLogService.selectAll(loginLog));
 	}
 }

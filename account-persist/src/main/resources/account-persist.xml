@@ -31,12 +31,13 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:Configuration.xml" />
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath:limeng32/mirage/account/persist/Account.xml" />
+		<property name="mapperLocations"
+			value="classpath:limeng32/mirage/account/persist/mapper/*.xml" />
 		<property name="typeAliasesPackage" value="limeng32.mirage.account.persist" />
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="limeng32.mirage.account.persist" />
+		<property name="basePackage" value="limeng32.mirage.account.persist.mapper" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 </beans>

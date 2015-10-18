@@ -1,8 +1,9 @@
-package limeng32.mirage.account.persist;
+package limeng32.mirage.account.persist.mapper;
 
-import java.util.List;
+import java.util.Collection;
 
 import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.LoginLog;
 import limeng32.mirage.util.mapper.MapperFace;
 
 public interface AccountMapper extends MapperFace<Account> {
@@ -11,7 +12,7 @@ public interface AccountMapper extends MapperFace<Account> {
 	public Account select(int id);
 
 	@Override
-	public List<Account> selectAll(Account t);
+	public Collection<Account> selectAll(Account t);
 
 	@Override
 	public void insert(Account t);
@@ -34,4 +35,5 @@ public interface AccountMapper extends MapperFace<Account> {
 	@Override
 	public int count(Account t);
 
+	public void loadLoginLog(Account account, LoginLog loginLog);
 }
