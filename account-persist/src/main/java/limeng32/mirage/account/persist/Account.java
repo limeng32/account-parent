@@ -30,6 +30,8 @@ public class Account extends PojoSupport<Account> implements Serializable {
 	 * */
 	private boolean activated;
 
+	public java.util.Collection<LoginLog> loginLog;
+
 	public Integer getId() {
 		return id;
 	}
@@ -68,6 +70,58 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	public void setActivated(boolean activated) {
 		this.activated = activated;
+	}
+
+	public java.util.Collection<LoginLog> getLoginLog() {
+		if (loginLog == null)
+			loginLog = new java.util.HashSet<LoginLog>();
+		return loginLog;
+	}
+
+	public java.util.Iterator<LoginLog> getIteratorLoginLog() {
+		if (loginLog == null)
+			loginLog = new java.util.HashSet<LoginLog>();
+		return loginLog.iterator();
+	}
+
+	public void setLoginLog(java.util.Collection<LoginLog> newLoginLog) {
+		removeAllLoginLog();
+		for (java.util.Iterator<LoginLog> iter = newLoginLog.iterator(); iter
+				.hasNext();)
+			addLoginLog((LoginLog) iter.next());
+	}
+
+	public void addLoginLog(LoginLog newLoginLog) {
+		if (newLoginLog == null)
+			return;
+		if (this.loginLog == null)
+			this.loginLog = new java.util.HashSet<LoginLog>();
+		if (!this.loginLog.contains(newLoginLog)) {
+			this.loginLog.add(newLoginLog);
+			newLoginLog.setAccount(this);
+		}
+	}
+
+	public void removeLoginLog(LoginLog oldLoginLog) {
+		if (oldLoginLog == null)
+			return;
+		if (this.loginLog != null)
+			if (this.loginLog.contains(oldLoginLog)) {
+				this.loginLog.remove(oldLoginLog);
+				oldLoginLog.setAccount((Account) null);
+			}
+	}
+
+	public void removeAllLoginLog() {
+		if (loginLog != null) {
+			LoginLog oldLoginLog;
+			for (java.util.Iterator<LoginLog> iter = getIteratorLoginLog(); iter
+					.hasNext();) {
+				oldLoginLog = (LoginLog) iter.next();
+				iter.remove();
+				oldLoginLog.setAccount((Account) null);
+			}
+		}
 	}
 
 }
