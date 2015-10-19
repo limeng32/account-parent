@@ -16,6 +16,7 @@ public class LoginLog extends PojoSupport<LoginLog> implements Serializable {
 	@FieldMapperAnnotation(dbFieldName = "id", jdbcType = JdbcType.INTEGER, isUniqueKey = true)
 	private Integer id;
 
+	@FieldMapperAnnotation(dbFieldName = "loginTime", jdbcType = JdbcType.TIMESTAMP)
 	private java.util.Date loginTime;
 
 	@FieldMapperAnnotation(dbFieldName = "loginIP", jdbcType = JdbcType.VARCHAR)
@@ -26,10 +27,6 @@ public class LoginLog extends PojoSupport<LoginLog> implements Serializable {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public java.util.Date getLoginTime() {

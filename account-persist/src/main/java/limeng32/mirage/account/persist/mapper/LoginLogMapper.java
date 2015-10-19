@@ -2,7 +2,6 @@ package limeng32.mirage.account.persist.mapper;
 
 import java.util.Collection;
 
-import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.LoginLog;
 import limeng32.mirage.util.mapper.MapperFace;
 

@@ -28,16 +28,13 @@ public class Account extends PojoSupport<Account> implements Serializable {
 	/**
 	 * 是否已激活
 	 * */
+	@FieldMapperAnnotation(dbFieldName = "activated", jdbcType = JdbcType.BOOLEAN)
 	private boolean activated;
 
 	private java.util.Collection<LoginLog> loginLog;
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public java.lang.String getName() {
