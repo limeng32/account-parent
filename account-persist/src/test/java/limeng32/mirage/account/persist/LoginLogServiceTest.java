@@ -21,7 +21,7 @@ public class LoginLogServiceTest {
 	private BasicDataSource dataSource;
 
 	@Autowired
-	private AccountService accountService;
+	private AccountPersistService accountService;
 
 	@Autowired
 	private LoginLogService loginLogService;

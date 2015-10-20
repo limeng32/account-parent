@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountService extends ServiceSupport<Account> implements
+public class AccountPersistService extends ServiceSupport<Account> implements
 		AccountMapper {
 
 	@Autowired

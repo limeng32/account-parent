@@ -19,7 +19,7 @@ public class AccountServiceTest {
 	private BasicDataSource dataSource;
 
 	@Autowired
-	private AccountService accountService;
+	private AccountPersistService accountService;
 
 	@Test
 	public void testDataSource() {
