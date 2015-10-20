@@ -3,7 +3,7 @@
   <artifactId>account-email</artifactId>
   <name>Account Email</name>
   <parent>
-  	<groupId>com.limeng32.mirage</groupId>
+  	<groupId>limeng32.mirage</groupId>
   	<artifactId>account-parent</artifactId>
   	<version>1.0.0-SNAPSHOT</version>
   </parent>

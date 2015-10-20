@@ -179,5 +179,6 @@
 		<module>account-email</module>
 		<module>account-persist</module>
 		<module>account-captcha</module>
+		<module>account-service</module>
 	</modules>
 </project>
