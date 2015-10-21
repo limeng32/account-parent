@@ -11,10 +11,12 @@ import java.util.Properties;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Service;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
+@Service
 public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 		InitializingBean {
 

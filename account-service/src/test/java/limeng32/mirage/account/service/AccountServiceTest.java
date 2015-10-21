@@ -1,86 +1,96 @@
 package limeng32.mirage.account.service;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.Message;
-
 import limeng32.mirage.account.captcha.AccountCaptchaService;
+import limeng32.mirage.account.email.AccountEmailService;
+import limeng32.mirage.account.persist.AccountPersistService;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.GreenMailUtil;
-import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:account-email.xml",
+		"classpath:account-persist.xml", "classpath:account-captcha.xml",
+		"classpath:account-service.xml" })
 public class AccountServiceTest {
 	private GreenMail greenMail;
 
+	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private AccountEmailService accountEmailService;
+
+	@Autowired
+	private AccountCaptchaService accountCaptchaService;
+
+	@Autowired
+	private AccountPersistService accountPersistService;
 
 	@Before
 	public void prepare() throws Exception {
-		String[] springConfigFiles = { "account-email.xml",
-				"account-persist.xml", "account-captcha.xml",
-				"account-service.xml" };
-
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(
-				springConfigFiles);
-
-		AccountCaptchaService accountCaptchaService = (AccountCaptchaService) ctx
-				.getBean("accountCaptchaService");
 
 		List<String> preDefinedTexts = new ArrayList<String>();
 		preDefinedTexts.add("12345");
 		preDefinedTexts.add("abcde");
 		accountCaptchaService.setPreDefinedTexts(preDefinedTexts);
 
-		accountService = (AccountService) ctx.getBean("accountService");
-
-		greenMail = new GreenMail(ServerSetup.SMTP);
-		greenMail.setUser("test@juvenxu.com", "123456");
+		greenMail = new GreenMail(ServerSetupTest.SMTP);
+		// greenMail.setUser("test@juvenxu.com", "123456");
 		greenMail.start();
 
-		File persistDataFile = new File("target/test-classes/persist-data.xml");
-		if (persistDataFile.exists()) {
-			persistDataFile.delete();
-		}
 	}
 
 	@Test
 	public void testAccountService() throws Exception {
+		// 0. Test AccountEmailService
+		String sendTo = "test2@limeng32.com";
+		String subject = "Test Subject";
+		String htmlText = "<h3>Test</h3>";
+		accountEmailService.sendMail(sendTo, subject, htmlText);
+
 		// 1. Get captcha
 		String captchaKey = accountService.generateCaptchaKey();
 		accountService.generateCaptchaImage(captchaKey);
 		String captchaValue = "12345";
 
-		// 2. Submit sign up Request
-		SignUpRequest signUpRequest = new SignUpRequest();
-		signUpRequest.setCaptchaKey(captchaKey);
-		signUpRequest.setCaptchaValue(captchaValue);
-		signUpRequest.setId("juven");
-		signUpRequest.setEmail("test@juvenxu.com");
-		signUpRequest.setName("Juven Xu");
-		signUpRequest.setPassword("admin123");
-		signUpRequest.setConfirmPassword("admin123");
-		signUpRequest
-				.setActivateServiceUrl("http://localhost:8080/account/activate");
-		accountService.signUp(signUpRequest);
+		// 1a. Test AccountPersistService
+		Assert.assertNotNull(accountPersistService.select(1));
 
-		// 3. Read activation link
-		greenMail.waitForIncomingEmail(2000, 1);
-		Message[] msgs = greenMail.getReceivedMessages();
-		assertEquals(1, msgs.length);
-		assertEquals("Please Activate Your Account", msgs[0].getSubject());
-		String activationLink = GreenMailUtil.getBody(msgs[0]).trim();
+		// 1b. Test AccountService.login
+		Assert.assertNotNull(accountService.login(1));
+
+		// // 2. Submit sign up Request
+		// SignUpRequest signUpRequest = new SignUpRequest();
+		// signUpRequest.setCaptchaKey(captchaKey);
+		// signUpRequest.setCaptchaValue(captchaValue);
+		// signUpRequest.setId("juven");
+		// signUpRequest.setEmail("test@juvenxu.com");
+		// signUpRequest.setName("Juven Xu");
+		// signUpRequest.setPassword("admin123");
+		// signUpRequest.setConfirmPassword("admin123");
+		// signUpRequest
+		// .setActivateServiceUrl("http://localhost:8080/account/activate");
+		// accountService.signUp(signUpRequest);
+		//
+		// // 3. Read activation link
+		// greenMail.waitForIncomingEmail(2000, 1);
+		// Message[] msgs = greenMail.getReceivedMessages();
+		// Assert.assertEquals(1, msgs.length);
+		// Assert.assertEquals("Please Activate Your Account",
+		// msgs[0].getSubject());
+		// String activationLink = GreenMailUtil.getBody(msgs[0]).trim();
 
 		// // 3a. Try login but not activated
 		// try

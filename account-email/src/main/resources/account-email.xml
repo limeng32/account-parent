@@ -28,7 +28,7 @@
 		</property>
 	</bean>
 
-	<bean id="accountEmailService" class="limeng32.mirage.account.email.AccountEmailServiceImpl">
+	<bean class="limeng32.mirage.account.email.AccountEmailServiceImpl">
 		<property name="javaMailSender" ref="javaMailSender" />
 		<property name="systemEmail" value="${email.systemEmail}" />
 	</bean>

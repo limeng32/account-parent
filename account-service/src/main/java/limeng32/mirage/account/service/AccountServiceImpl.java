@@ -104,9 +104,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void login(String id, String password)
-			throws AccountServiceException {
-		// TODO Auto-generated method stub
+	public Account login(Integer id) throws AccountServiceException {
+		try {
+			return accountPersistService.select(id);
+		} catch (Exception e) {
+			throw new AccountServiceException("Unable to login.", e);
+		}
 
 	}
 

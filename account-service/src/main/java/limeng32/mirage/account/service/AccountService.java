@@ -1,5 +1,7 @@
 package limeng32.mirage.account.service;
 
+import limeng32.mirage.account.persist.Account;
+
 public interface AccountService {
 	String generateCaptchaKey() throws AccountServiceException;
 
@@ -10,5 +12,5 @@ public interface AccountService {
 
 	void activate(String activationNumber) throws AccountServiceException;
 
-	void login(String id, String password) throws AccountServiceException;
+	Account login(Integer id) throws AccountServiceException;
 }
