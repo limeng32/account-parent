@@ -5,6 +5,7 @@ import java.util.List;
 
 import limeng32.mirage.account.captcha.AccountCaptchaService;
 import limeng32.mirage.account.email.AccountEmailService;
+import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
 
 import org.junit.After;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,18 +40,22 @@ public class AccountServiceTest {
 	@Autowired
 	private AccountPersistService accountPersistService;
 
+	private MockHttpServletRequest request;
+
 	@Before
 	public void prepare() throws Exception {
 
 		List<String> preDefinedTexts = new ArrayList<String>();
-		preDefinedTexts.add("12345");
 		preDefinedTexts.add("abcde");
+		preDefinedTexts.add("12345");
 		accountCaptchaService.setPreDefinedTexts(preDefinedTexts);
 
 		greenMail = new GreenMail(ServerSetupTest.SMTP);
 		// greenMail.setUser("test@juvenxu.com", "123456");
 		greenMail.start();
 
+		request = new MockHttpServletRequest();
+		request.setCharacterEncoding("UTF-8");
 	}
 
 	@Test
@@ -63,7 +69,7 @@ public class AccountServiceTest {
 		// 1. Get captcha
 		String captchaKey = accountService.generateCaptchaKey();
 		accountService.generateCaptchaImage(captchaKey);
-		String captchaValue = "12345";
+		String captchaValue = "abcde";
 
 		// 1a. Test AccountPersistService
 		Assert.assertNotNull(accountPersistService.select(1));
@@ -71,18 +77,13 @@ public class AccountServiceTest {
 		// 1b. Test AccountService.login
 		Assert.assertNotNull(accountService.login(1));
 
-		// // 2. Submit sign up Request
-		// SignUpRequest signUpRequest = new SignUpRequest();
-		// signUpRequest.setCaptchaKey(captchaKey);
-		// signUpRequest.setCaptchaValue(captchaValue);
-		// signUpRequest.setId("juven");
-		// signUpRequest.setEmail("test@juvenxu.com");
-		// signUpRequest.setName("Juven Xu");
-		// signUpRequest.setPassword("admin123");
-		// signUpRequest.setConfirmPassword("admin123");
-		// signUpRequest
-		// .setActivateServiceUrl("http://localhost:8080/account/activate");
-		// accountService.signUp(signUpRequest);
+		// 2. Submit sign up Request
+		Account account = new Account();
+		account.setName("limeng0");
+		account.setEmail("limeng32@live.cn");
+		account.setPassword("admin123");
+		accountService.signUp(account, captchaKey, captchaValue,
+				"http://localhost:8080/account/activate");
 		//
 		// // 3. Read activation link
 		// greenMail.waitForIncomingEmail(2000, 1);

@@ -50,7 +50,28 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void signUp(SignUpRequest signUpRequest)
+	public void signUp(Account account, String captchaKey, String captchaValue,
+			String activateServiceUrl) throws AccountServiceException {
+		try {
+			if (!accountCaptchaService
+					.validateCaptcha(captchaKey, captchaValue)) {
+				throw new AccountServiceException("Incorrect Captcha.");
+			}
+
+			accountPersistService.insert(account);
+
+			String activationId = RandomGenerator.getRandomString();
+			String link = activateServiceUrl.endsWith("/") ? activateServiceUrl
+					+ activationId : activateServiceUrl + "?key="
+					+ activationId;
+			System.out.println(":" + link);
+
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException("Unable to validate captcha.", e);
+		}
+	}
+
+	public void signUp1(SignUpRequest signUpRequest)
 			throws AccountServiceException {
 		try {
 

@@ -8,7 +8,8 @@ public interface AccountService {
 	byte[] generateCaptchaImage(String captchaKey)
 			throws AccountServiceException;
 
-	void signUp(SignUpRequest signUpRequest) throws AccountServiceException;
+	void signUp(Account account, String captchaKey, String captchaValue,
+			String activateServiceUrl) throws AccountServiceException;
 
 	void activate(String activationNumber) throws AccountServiceException;
 
