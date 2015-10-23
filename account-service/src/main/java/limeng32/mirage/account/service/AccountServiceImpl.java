@@ -1,7 +1,6 @@
 package limeng32.mirage.account.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
 import limeng32.mirage.account.captcha.AccountCaptchaException;
 import limeng32.mirage.account.captcha.AccountCaptchaService;
@@ -25,8 +24,6 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountCaptchaService accountCaptchaService;
-
-	private Map<String, Integer> activationMap = new HashMap<>();
 
 	@Override
 	public String generateCaptchaKey() throws AccountServiceException {
@@ -59,46 +56,12 @@ public class AccountServiceImpl implements AccountService {
 			}
 
 			accountPersistService.insert(account);
-
 			String activationId = RandomGenerator.getRandomString();
+			account.setActivateValue(activationId);
+			accountPersistService.update(account);
 			String link = activateServiceUrl.endsWith("/") ? activateServiceUrl
-					+ activationId : activateServiceUrl + "?key="
-					+ activationId;
-			System.out.println(":" + link);
-
-		} catch (AccountCaptchaException e) {
-			throw new AccountServiceException("Unable to validate captcha.", e);
-		}
-	}
-
-	public void signUp1(SignUpRequest signUpRequest)
-			throws AccountServiceException {
-		try {
-
-			if (!accountCaptchaService.validateCaptcha(
-					signUpRequest.getCaptchaKey(),
-					signUpRequest.getCaptchaValue())) {
-
-				throw new AccountServiceException("Incorrect Captcha.");
-			}
-
-			Account account = new Account();
-			account.setEmail(signUpRequest.getEmail());
-			account.setName(signUpRequest.getName());
-			account.setPassword(signUpRequest.getPassword());
-			account.setActivated(false);
-
-			accountPersistService.insert(account);
-
-			String activationId = RandomGenerator.getRandomString();
-
-			activationMap.put(activationId, account.getId());
-
-			String link = signUpRequest.getActivateServiceUrl().endsWith("/") ? signUpRequest
-					.getActivateServiceUrl() + activationId
-					: signUpRequest.getActivateServiceUrl() + "?key="
-							+ activationId;
-
+					: activateServiceUrl + "?";
+			link += "k=" + account.getEmail() + "&v=" + activationId;
 			accountEmailService.sendMail(account.getEmail(),
 					"Please Activate Your Account", link);
 		} catch (AccountCaptchaException e) {
@@ -107,31 +70,52 @@ public class AccountServiceImpl implements AccountService {
 			throw new AccountServiceException(
 					"Unable to send actiavtion mail.", e);
 		}
-
 	}
 
 	@Override
-	public void activate(String activationId) throws AccountServiceException {
-		Integer accountId = activationMap.get(activationId);
-
-		if (accountId == null) {
-			throw new AccountServiceException("Invalid account activation ID.");
+	public void activate(String activationKey, String activationValue)
+			throws AccountServiceException {
+		if (activationKey == null || activationValue == null) {
+			throw new AccountServiceException(
+					"ActivationKey or activationValue is Null.");
 		}
-
-		Account account = accountPersistService.select(accountId);
-		account.setActivated(true);
-		accountPersistService.update(account);
-
+		Account ac = new Account();
+		ac.setEmail(activationKey);
+		ac.setActivateValue(activationValue);
+		Collection<Account> accountC = accountPersistService.selectAll(ac);
+		switch (accountC.size()) {
+		case 1:
+			Account account = accountC.toArray(new Account[1])[0];
+			account.setActivated(true);
+			account.setActivateValue("");
+			accountPersistService.update(account);
+			break;
+		case 0:
+			throw new AccountServiceException(
+					"Invalid activationKey or activationValue.");
+		default:
+			throw new AccountServiceException("Unable to activate.");
+		}
 	}
 
 	@Override
-	public Account login(Integer id) throws AccountServiceException {
-		try {
-			return accountPersistService.select(id);
-		} catch (Exception e) {
-			throw new AccountServiceException("Unable to login.", e);
+	public Account login(String email, String password)
+			throws AccountServiceException {
+		if (email == null || password == null) {
+			throw new AccountServiceException("Email or password is Null.");
 		}
-
+		Account ac = new Account();
+		ac.setEmail(email);
+		ac.setPassword(password);
+		Collection<Account> accountC = accountPersistService.selectAll(ac);
+		switch (accountC.size()) {
+		case 1:
+			return accountC.toArray(new Account[1])[0];
+		case 0:
+			throw new AccountServiceException("Email or password is not exist.");
+		default:
+			throw new AccountServiceException(
+					"You account has problem. Please contact the admin.");
+		}
 	}
-
 }

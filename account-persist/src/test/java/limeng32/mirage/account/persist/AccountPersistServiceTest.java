@@ -49,8 +49,8 @@ public class AccountPersistServiceTest {
 	@Test
 	public void testBooleanHandler() {
 		Account a = accountService.select(1);
-		Assert.assertTrue(a.isActivated());
+		Assert.assertTrue(a.getActivated());
 		Account a2 = accountService.select(2);
-		Assert.assertFalse(a2.isActivated());
+		Assert.assertFalse(a2.getActivated());
 	}
 }

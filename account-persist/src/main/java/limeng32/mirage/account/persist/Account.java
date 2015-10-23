@@ -8,6 +8,8 @@ import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.TableMapperAnnotat
 
 import org.apache.ibatis.type.JdbcType;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 @TableMapperAnnotation(tableName = "account")
 public class Account extends PojoSupport<Account> implements Serializable {
 
@@ -29,7 +31,15 @@ public class Account extends PojoSupport<Account> implements Serializable {
 	 * 是否已激活
 	 * */
 	@FieldMapperAnnotation(dbFieldName = "activated", jdbcType = JdbcType.BOOLEAN)
-	private boolean activated;
+	private Boolean activated;
+
+	/**
+	 * 激活码
+	 * 
+	 */
+	@JSONField(serialize = false)
+	@FieldMapperAnnotation(dbFieldName = "activateValue", jdbcType = JdbcType.VARCHAR)
+	private java.lang.String activateValue;
 
 	private java.util.Collection<LoginLog> loginLog;
 
@@ -61,12 +71,20 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		this.password = password;
 	}
 
-	public boolean isActivated() {
+	public Boolean getActivated() {
 		return activated;
 	}
 
-	public void setActivated(boolean activated) {
+	public void setActivated(Boolean activated) {
 		this.activated = activated;
+	}
+
+	public java.lang.String getActivateValue() {
+		return activateValue;
+	}
+
+	public void setActivateValue(java.lang.String activateValue) {
+		this.activateValue = activateValue;
 	}
 
 	public java.util.Collection<LoginLog> getLoginLog() {

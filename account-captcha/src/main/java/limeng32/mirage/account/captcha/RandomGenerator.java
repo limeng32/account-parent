@@ -21,4 +21,17 @@ public class RandomGenerator {
 		return result.toString();
 	}
 
+	public static synchronized String getRandomString(int size) {
+
+		Random random = new Random();
+
+		StringBuffer result = new StringBuffer();
+
+		for (int i = 0; i < size; i++) {
+			result.append(range.charAt(random.nextInt(range.length())));
+		}
+
+		return result.toString();
+	}
+
 }
