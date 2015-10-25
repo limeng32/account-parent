@@ -1,0 +1,24 @@
+.ks-dataFrame {
+	margin-left: 200px;
+	border: 1px solid #48AFEE;
+}
+
+.ks-dataFrame td {
+	border: 1px solid #48AFEE;
+	height: 30px;
+	width: 100px;
+}
+
+.ks-dataFrame-PSpan {
+	margin-left: 150px;
+}
+
+.ks-dataFrame-PB, .ks-dataFrame-PN, .ks-dataFrame-PF, .ks-dataFrame-PM {
+	margin: 5px;
+}
+
+.ks-dataFrame-QB {
+	font-weight: bold;
+	width: 80px;
+	margin-left: 200px;
+}

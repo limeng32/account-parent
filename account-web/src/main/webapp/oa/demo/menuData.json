@@ -1,0 +1,70 @@
+{
+	"0" : {
+		"name" : "fileCase",
+		"content" : "首页",
+		"sub" : {
+			"0" : {
+				"name" : "task",
+				"content" : "待办"
+			},
+			"1" : {
+				"name" : "read",
+				"content" : "待阅"
+			}
+		}
+	},
+	"1" : {
+		"name" : "fileCase",
+		"content" : "公文箱",
+		"sub" : {
+			"0" : {
+				"name" : "task",
+				"content" : "待办"
+			},
+			"1" : {
+				"name" : "read",
+				"content" : "待阅"
+			},
+			"2" : {
+				"name" : "read",
+				"content" : "已办"
+			},
+			"3" : {
+				"name" : "read",
+				"content" : "已阅"
+			},
+			"4" : {
+				"name" : "draft",
+				"content" : "起草文件",
+				"sub" : {
+					"0" : {
+						"name" : "task",
+						"content" : "发文"
+					},
+					"1" : {
+						"name" : "task",
+						"content" : "收文"
+					}
+				}
+			}
+		}
+	},
+	"2" : {
+		"name" : "config",
+		"content" : "个人设置",
+		"sub" : {
+			"0" : {
+				"name" : "sms",
+				"content" : "短信设置"
+			},
+			"1" : {
+				"name" : "group",
+				"content" : "自定义人员组"
+			}
+		}
+	},
+	"2" : {
+		"name" : "exchange",
+		"content" : "工作交接",
+	}
+}

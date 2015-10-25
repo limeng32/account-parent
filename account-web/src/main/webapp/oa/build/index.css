@@ -1,0 +1,153 @@
+body {
+	margin: 0;
+	background-color: #eee;
+}
+
+header {
+	background-color: #eee;
+	padding-bottom: 2px;
+}
+
+.image {
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+.banner {
+	background-image: url("../demo/image/headerBG.png");
+	height: 60px;
+	width: 100%;
+}
+
+.logoKnot {
+	float:left;
+	margin-top: 15px;
+	margin-left: 35px;
+	width: 67px;
+	height: 41px;
+	background-image: url(../demo/image/logoKnot.png);
+}
+
+.logoText {
+	float:left;
+	margin-top: 15px;
+	margin-left: 40px;
+	width: 338px;
+	height: 36px;
+	background-image: url(../demo/image/logoText.png);
+}
+
+.rightBox {
+	float: right;
+}
+
+.welcomePanel {
+	float: right;
+	margin-top: 26px;
+	margin-right: 40px;
+}
+
+.welcomeImage {
+	float: left;
+	width: 60px;
+	height: 26px;
+	background-image: url(../demo/image/welcomePanel.png);
+}
+
+.welcomePerson {
+	float: left;
+	margin-left: 2px;
+	margin-top: 4px;
+	font-size: 14px;
+	font-weight: bolder;
+	font-family: "ºÚÌå";
+}
+
+.rightPanel {
+	float: right;
+	margin-top: 12px;
+	margin-right: 50px;
+}
+
+.rightPanelItems {
+	float: left;
+	margin-top: 15px;
+	margin-right: 20px;
+}
+
+article {
+}
+
+.middleBanner {
+	background-image: url("../demo/image/middleBG.png");
+	margin: 0;
+	height: 40px;
+	width: 100%;
+}
+
+.sorterPanel {
+	float: left;
+	margin-top: 7px;
+	margin-left: 8px;
+}
+
+.oa-sorter {
+	font-weight: bold;
+	width: 80px;
+}
+
+.oa-sorter-arrow {
+	height: 11px;
+	margin-left: 5px;
+	margin-top: 2px;
+}
+
+.sorterPanelLeft {
+	float: left;
+	font-size: 14px;
+	color: #ffffff;
+	margin-top: 8px;
+	margin-top: 10px\9;
+	margin-left: 15px;
+}
+
+.sorterPanelRight {
+	float: left;
+	font-size: 14px;
+	color: #ffffff;
+	margin-top: 8px;
+	margin-top: 10px\9;
+	margin-left: 5px;
+}
+
+.bannerSeparatorSpan {
+	float: left;
+	margin-left: 5px;
+}
+
+.bannerSeparator {
+	margin-top: 6px;
+}
+
+.navigatorSpan {
+	float: left;
+	margin-left: 0px;
+}
+
+.headerSetting {
+	width: 50px;
+	height: 25px;
+	background-image: url(../demo/image/headerNewSetting.png);
+}
+
+.headerSearch {
+	width: 50px;
+	height: 25px;
+	background-image: url(../demo/image/headerSearch.png);
+}
+
+.headerHelping {
+	width: 50px;
+	height: 25px;
+	background-image: url(../demo/image/headerNewHelping.png);
+}
