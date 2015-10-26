@@ -15,7 +15,7 @@
 
 	<context:property-placeholder location="classpath:service.properties" />
 
-	<context:component-scan base-package="limeng32.mirage.*" />
+	<context:component-scan base-package="limeng32.mirage.account.*" />
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">

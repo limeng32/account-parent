@@ -1,7 +1,0 @@
-{
-    "name": "bee-demo",
-    "kissy":"5.0.1",
-    "dependencies": {
-        "kg-top": "1.0.0"
-    }
-}

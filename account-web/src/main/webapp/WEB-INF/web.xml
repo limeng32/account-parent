@@ -8,9 +8,13 @@
 	</welcome-file-list>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
+		<param-value>
+			classpath:account-persist.xml
+			classpath:account-captcha.xml
+			classpath:account-email.xml
+			classpath:account-service.xml
+		</param-value>
 	</context-param>
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

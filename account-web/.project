@@ -3,6 +3,9 @@
 	<name>mirage</name>
 	<comment></comment>
 	<projects>
+		<project>account-service</project>
+		<project>account-email</project>
+		<project>account-captcha</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
