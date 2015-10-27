@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "/index")
-public class TestController {
+@RequestMapping(value = "/signUp")
+public class AccountController {
 
 	@Autowired
 	AccountPersistService accountPersistService;
@@ -19,9 +19,8 @@ public class TestController {
 	AccountService accountService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String get() {
-		System.out.println(accountPersistService.select(1).getName());
-		return "index";
+	public String dev_signUp() {
+		return "signUp";
 	}
 
 }

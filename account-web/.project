@@ -6,6 +6,7 @@
 		<project>account-service</project>
 		<project>account-email</project>
 		<project>account-captcha</project>
+		<project>mybatisPlugin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
