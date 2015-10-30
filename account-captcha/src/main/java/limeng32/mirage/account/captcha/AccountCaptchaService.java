@@ -6,6 +6,15 @@ public interface AccountCaptchaService {
 
 	String generateCaptchaKey() throws AccountCaptchaException;
 
+	String generateCaptchaKeyNew(String remoteIP)
+			throws AccountCaptchaException;
+
+	byte[] generateCaptchaImageNew(String captchaText)
+			throws AccountCaptchaException;
+
+	boolean validateCaptchaNew(String remoteIP, String captchaValue)
+			throws AccountCaptchaException;
+
 	byte[] generateCaptchaImage(String captchaKey)
 			throws AccountCaptchaException;
 

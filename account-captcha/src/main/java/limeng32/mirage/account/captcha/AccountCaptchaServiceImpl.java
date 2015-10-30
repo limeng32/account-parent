@@ -113,4 +113,49 @@ public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 		}
 	}
 
+	@Override
+	public String generateCaptchaKeyNew(String remoteIP)
+			throws AccountCaptchaException {
+		String value = getCaptchaText();
+		captchaMap.put(remoteIP, value);
+		return value;
+	}
+
+	@Override
+	public byte[] generateCaptchaImageNew(String captchaText)
+			throws AccountCaptchaException {
+
+		if (captchaText == null) {
+			throw new AccountCaptchaException("captchaText is null!");
+		}
+		BufferedImage image = producer.createImage(captchaText);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try {
+			ImageIO.write(image, "jpg", out);
+		} catch (IOException e) {
+			throw new AccountCaptchaException(
+					"Failed to write captcha stream!", e);
+		}
+
+		return out.toByteArray();
+	}
+
+	@Override
+	public boolean validateCaptchaNew(String remoteIP, String captchaValue)
+			throws AccountCaptchaException {
+		String text = captchaMap.get(remoteIP);
+		if (text == null) {
+			throw new AccountCaptchaException("RemoteIP '" + remoteIP
+					+ "' not found!");
+		}
+		if (text.equals(captchaValue)) {
+			captchaMap.remove(remoteIP);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

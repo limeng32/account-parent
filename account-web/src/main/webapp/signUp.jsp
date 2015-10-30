@@ -14,7 +14,7 @@
         KISSY.config({
             packages: [
                 {
-                    name: 'accountFront',
+                    name: 'account-front',
                     base: base,
                     ignorePackageNameInUri: true,
                     combine:false
@@ -25,7 +25,7 @@
 
 
     <script>
-    KISSY.importStyle('accountFront/index.css');
+    KISSY.importStyle('account-front/index.css');
     </script>
 </head>
 <body>
@@ -39,7 +39,7 @@
 </article>
 
 <script>
-KISSY.use('accountFront/index');
+KISSY.use('account-front/index');
 </script>
 </body>
 </html>
