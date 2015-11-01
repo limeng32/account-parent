@@ -118,4 +118,31 @@ public class AccountServiceImpl implements AccountService {
 					"You account has problem. Please contact the admin.");
 		}
 	}
+
+	@Override
+	public void signUpNew(Account account, String captchaValue,
+			String remoteIP, String activateServiceUrl)
+			throws AccountServiceException {
+		try {
+			if (!accountCaptchaService.validateCaptchaNew(remoteIP,
+					captchaValue)) {
+				throw new AccountServiceException("Incorrect Captcha.");
+			}
+
+			String activationId = RandomGenerator.getRandomString();
+			account.setActivateValue(activationId);
+			account.setActivated(false);
+			accountPersistService.insert(account);
+			String link = activateServiceUrl.endsWith("/") ? activateServiceUrl
+					: activateServiceUrl + "?";
+			link += "k=" + account.getEmail() + "&v=" + activationId;
+			accountEmailService.sendMail(account.getEmail(),
+					"Please Activate Your Account", link);
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException("Unable to validate captcha.", e);
+		} catch (AccountEmailException e) {
+			throw new AccountServiceException(
+					"Unable to send actiavtion mail.", e);
+		}
+	}
 }
