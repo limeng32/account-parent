@@ -10,6 +10,7 @@ import limeng32.mirage.account.email.AccountEmailService;
 import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountCaptchaService accountCaptchaService;
+
+	@Autowired
+	private AccountServiceConfig accountServiceConfig;
 
 	@Override
 	public String generateCaptchaKey() throws AccountServiceException {
@@ -120,8 +124,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void signUpNew(Account account, String captchaValue,
-			String remoteIP, String activateServiceUrl)
+	public void signUpNew(Account account, String captchaValue, String remoteIP)
 			throws AccountServiceException {
 		try {
 			if (!accountCaptchaService.validateCaptchaNew(remoteIP,
@@ -132,12 +135,16 @@ public class AccountServiceImpl implements AccountService {
 			String activationId = RandomGenerator.getRandomString();
 			account.setActivateValue(activationId);
 			account.setActivated(false);
+			account.setPassword(DigestUtils.md5Hex(account.getPassword()));
 			accountPersistService.insert(account);
-			String link = activateServiceUrl.endsWith("/") ? activateServiceUrl
-					: activateServiceUrl + "?";
-			link += "k=" + account.getEmail() + "&v=" + activationId;
+			String link = accountServiceConfig.getActivateUrl().endsWith("/") ? accountServiceConfig
+					.getActivateUrl() + account.getEmail() + "/" + activationId
+					: accountServiceConfig.getActivateUrl() + "?k="
+							+ account.getEmail() + "&v=" + activationId;
 			accountEmailService.sendMail(account.getEmail(),
-					"Please Activate Your Account", link);
+					accountServiceConfig.getActivateEmailSubject(),
+					accountServiceConfig.getActivateEmailBody() + "<a href='"
+							+ link + "'>" + link + "</a>");
 		} catch (AccountCaptchaException e) {
 			throw new AccountServiceException("Unable to validate captcha.", e);
 		} catch (AccountEmailException e) {
@@ -145,4 +152,5 @@ public class AccountServiceImpl implements AccountService {
 					"Unable to send actiavtion mail.", e);
 		}
 	}
+
 }

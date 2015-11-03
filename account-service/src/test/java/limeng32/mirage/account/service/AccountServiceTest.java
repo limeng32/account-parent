@@ -39,6 +39,9 @@ public class AccountServiceTest {
 	@Autowired
 	private AccountCaptchaService accountCaptchaService;
 
+	@Autowired
+	private AccountServiceConfig accountServiceConfig;
+
 	@Before
 	public void prepare() throws Exception {
 
@@ -83,6 +86,11 @@ public class AccountServiceTest {
 			Assert.assertFalse(a.getActivated());
 		} catch (AccountServiceException e) {
 		}
+
+		// 3b. Test AccountServiceConfig
+		Assert.assertNotNull(accountServiceConfig.getActivateEmailBody());
+		Assert.assertNotNull(accountServiceConfig.getActivateEmailSubject());
+		Assert.assertNotNull(accountServiceConfig.getActivateUrl());
 
 		// 4. Activate account
 		String activationValue = activationLink.substring(activationLink

@@ -11,8 +11,8 @@ public interface AccountService {
 	void signUp(Account account, String captchaKey, String captchaValue,
 			String activateServiceUrl) throws AccountServiceException;
 
-	void signUpNew(Account account, String captchaValue, String remoteIP,
-			String activateServiceUrl) throws AccountServiceException;
+	void signUpNew(Account account, String captchaValue, String remoteIP)
+			throws AccountServiceException;
 
 	void activate(String activationKey, String activationValue)
 			throws AccountServiceException;

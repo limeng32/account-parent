@@ -91,12 +91,25 @@ public class AccountController {
 		boolean result = false;
 		try {
 			accountService.signUpNew(account, captchaValue,
-					request.getRemoteAddr(), "asd");
+					request.getRemoteAddr());
 			result = true;
 		} catch (AccountServiceException e) {
 			response.sendError(400, e.getMessage());
 		}
 		mm.addAttribute("_content", result);
 		return "testController1";
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/activate", params = {
+			"k", "v" })
+	public String activateAccount(@RequestParam("k") String activationKey,
+			@RequestParam("v") String activationValue,
+			HttpServletResponse response) throws IOException {
+		try {
+			accountService.activate(activationKey, activationValue);
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
+		}
+		return null;
 	}
 }

@@ -15,4 +15,10 @@
 
 	<context:component-scan base-package="limeng32.mirage.account.*" />
 
+	<bean class="limeng32.mirage.account.service.AccountServiceConfig">
+		<property name="activateUrl" value="${account.activateUrl}" />
+		<property name="activateEmailSubject" value="${account.activateEmailSubject}" />
+		<property name="activateEmailBody" value="${account.activateEmailBody}" />
+	</bean>
+
 </beans>
