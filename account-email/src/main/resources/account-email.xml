@@ -13,8 +13,6 @@
        	http://www.springframework.org/schema/tx
        	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-	<context:property-placeholder location="classpath:service.properties" />
-
 	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="protocol" value="${email.protocol}" />
 		<property name="host" value="${email.host}" />
