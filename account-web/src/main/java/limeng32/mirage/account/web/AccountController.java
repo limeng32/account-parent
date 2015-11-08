@@ -100,6 +100,29 @@ public class AccountController {
 		return "testController1";
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/checkUnique", params = "email")
+	public String checkUnique(@RequestParam("email") String email,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap mm) throws IOException {
+		Account ac = new Account();
+		ac.setEmail(email);
+		int count = accountPersistService.count(ac);
+		boolean result = false;
+		if (count == 0) {
+			result = true;
+		}
+		mm.addAttribute("_content", result);
+		return "testController1";
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/submitNew")
+	public String signUpSubmitNew(HttpServletRequest request,
+			HttpServletResponse response, ModelMap mm, Account account)
+			throws IOException {
+		mm.addAttribute("_content", "");
+		return "testController1";
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/activate", params = {
 			"k", "v" })
 	public String activateAccount(@RequestParam("k") String activationKey,

@@ -7,14 +7,14 @@
 
 	<select id="selectAll" resultMap="result">#{cacheKey}</select>
 
-	<select id="count" resultType="int" />
+	<select id="count" resultType="int">#{cacheKey}</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id"></insert>
 
 	<update id="update" />
 
 	<update id="updatePersistent" />
- 
+
 	<delete id="delete" />
 
 	<update id="disable" />
