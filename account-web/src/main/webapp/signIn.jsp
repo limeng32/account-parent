@@ -17,7 +17,7 @@
                 {
                     name: 'account-front',
                     base: base,
-                    tag:  '2015110901',
+                    tag:  '2015110902',
                     ignorePackageNameInUri: true,
                     combine:false
                 }
@@ -27,7 +27,7 @@
 
 
     <script>
-    KISSY.importStyle('account-front/signUpWrapper.css,kg/auth/2.0.6/plugin/msgs/style.css');
+    KISSY.importStyle('account-front/signInWrapper.css,kg/auth/2.0.6/plugin/msgs/style.css');
     </script>
 </head>
 <body>
@@ -41,7 +41,7 @@
 </article>
 
 <script>
-KISSY.use('account-front/signUpWrapper');
+KISSY.use('account-front/signInWrapper');
 </script>
 </body>
 </html>

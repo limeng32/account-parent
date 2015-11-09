@@ -158,4 +158,15 @@ public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 		}
 	}
 
+	@Override
+	public boolean checkCaptcha(String remoteIP, String captchaValue)
+			throws AccountCaptchaException {
+		String text = captchaMap.get(remoteIP);
+		if (text != null && text.equals(captchaValue)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

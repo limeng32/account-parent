@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/signUp")
-public class AccountController {
+public class AccountSignUpController {
+
+	public static final String UNIQUE_VIEW_NAME = "__unique_view_name";
 
 	@Autowired
 	AccountPersistService accountPersistService;
@@ -34,7 +36,7 @@ public class AccountController {
 	AccountCaptchaService accountCaptchaService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String signUp() {
+	public String get() {
 		return "signUp";
 	}
 
@@ -48,7 +50,7 @@ public class AccountController {
 		} catch (AccountCaptchaException e) {
 			response.sendError(400, e.getMessage());
 		}
-		return "testController1";
+		return UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/captchaImage")
@@ -80,7 +82,7 @@ public class AccountController {
 			response.sendError(400, e.getMessage());
 		}
 		mm.addAttribute("_content", result);
-		return "testController1";
+		return UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/submit", params = "captchaValue")
@@ -97,7 +99,7 @@ public class AccountController {
 			response.sendError(400, e.getMessage());
 		}
 		mm.addAttribute("_content", result);
-		return "testController1";
+		return UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/checkUnique", params = "email")
@@ -112,15 +114,40 @@ public class AccountController {
 			result = true;
 		}
 		mm.addAttribute("_content", result);
-		return "testController1";
+		return UNIQUE_VIEW_NAME;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/submitNew")
+	@RequestMapping(method = RequestMethod.POST, value = "/captCheck", params = "captValue")
+	public String captCheck(@RequestParam("captValue") String captValue,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap mm) throws IOException {
+		boolean result = false;
+		try {
+			result = accountCaptchaService.checkCaptcha(
+					request.getRemoteAddr(), captValue);
+		} catch (AccountCaptchaException e) {
+			response.sendError(400, e.getMessage());
+		}
+		mm.addAttribute("_content", result);
+		return UNIQUE_VIEW_NAME;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/submitNew", params = "captchaValue")
 	public String signUpSubmitNew(HttpServletRequest request,
-			HttpServletResponse response, ModelMap mm, Account account)
+			HttpServletResponse response, ModelMap mm, Account account,
+			@RequestParam("captchaValue") String captchaValue)
 			throws IOException {
+		boolean result = false;
+		try {
+			accountService.signUpNew(account, captchaValue,
+					request.getRemoteAddr());
+			result = true;
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
+		}
+		System.out.println(":" + result);
 		mm.addAttribute("_content", "");
-		return "testController1";
+		return UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/activate", params = {

@@ -21,6 +21,9 @@ public interface AccountCaptchaService {
 	boolean validateCaptcha(String captchaKey, String captchaValue)
 			throws AccountCaptchaException;
 
+	boolean checkCaptcha(String remoteIP, String captchaValue)
+			throws AccountCaptchaException;
+
 	List<String> getPreDefinedTexts();
 
 	void setPreDefinedTexts(List<String> preDefinedTexts);

@@ -18,4 +18,6 @@ public interface AccountService {
 			throws AccountServiceException;
 
 	Account login(String email, String password) throws AccountServiceException;
+
+	boolean test(String email, String password) throws AccountServiceException;
 }

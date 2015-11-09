@@ -136,6 +136,10 @@ public class AccountServiceImpl implements AccountService {
 			account.setActivateValue(activationId);
 			account.setActivated(false);
 			account.setPassword(DigestUtils.md5Hex(account.getPassword()));
+			if (account.getName() == null) {
+				account.setName(account.getEmail().substring(0,
+						account.getEmail().indexOf("@")));
+			}
 			accountPersistService.insert(account);
 			String link = accountServiceConfig.getActivateUrl().endsWith("/") ? accountServiceConfig
 					.getActivateUrl() + account.getEmail() + "/" + activationId
@@ -150,6 +154,23 @@ public class AccountServiceImpl implements AccountService {
 		} catch (AccountEmailException e) {
 			throw new AccountServiceException(
 					"Unable to send actiavtion mail.", e);
+		}
+	}
+
+	@Override
+	public boolean test(String email, String password)
+			throws AccountServiceException {
+		Account ac = new Account();
+		ac.setEmail(email);
+		ac.setPassword(DigestUtils.md5Hex(password));
+		int count = accountPersistService.count(ac);
+		switch (count) {
+		case 1:
+			return true;
+		case 0:
+			return false;
+		default:
+			return true;
 		}
 	}
 
