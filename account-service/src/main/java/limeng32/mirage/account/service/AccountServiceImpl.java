@@ -53,12 +53,13 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void signUp(Account account, String captchaKey, String captchaValue,
 			String activateServiceUrl) throws AccountServiceException {
+		String originPassword = account.getPassword();
 		try {
 			if (!accountCaptchaService
 					.validateCaptcha(captchaKey, captchaValue)) {
 				throw new AccountServiceException("Incorrect Captcha.");
 			}
-
+			account.setPassword(DigestUtils.md5Hex(account.getPassword()));
 			accountPersistService.insert(account);
 			String activationId = RandomGenerator.getRandomString();
 			account.setActivateValue(activationId);
@@ -73,6 +74,8 @@ public class AccountServiceImpl implements AccountService {
 		} catch (AccountEmailException e) {
 			throw new AccountServiceException(
 					"Unable to send actiavtion mail.", e);
+		} finally {
+			account.setPassword(originPassword);
 		}
 	}
 
@@ -110,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
 		}
 		Account ac = new Account();
 		ac.setEmail(email);
-		ac.setPassword(password);
+		ac.setPassword(DigestUtils.md5Hex(password));
 		Collection<Account> accountC = accountPersistService.selectAll(ac);
 		switch (accountC.size()) {
 		case 1:
@@ -126,6 +129,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void signUpNew(Account account, String captchaValue, String remoteIP)
 			throws AccountServiceException {
+		String originPassword = account.getPassword();
 		try {
 			if (!accountCaptchaService.validateCaptchaNew(remoteIP,
 					captchaValue)) {
@@ -154,6 +158,8 @@ public class AccountServiceImpl implements AccountService {
 		} catch (AccountEmailException e) {
 			throw new AccountServiceException(
 					"Unable to send actiavtion mail.", e);
+		} finally {
+			account.setPassword(originPassword);
 		}
 	}
 

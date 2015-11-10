@@ -68,4 +68,18 @@ public class AccountSignInController {
 		}
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/submitNew")
+	public String submitNew(Account ac, HttpServletRequest request,
+			HttpServletResponse response, ModelMap mm) throws IOException {
+		Account account = null;
+		try {
+			account = accountService.login(ac.getEmail(), ac.getPassword());
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
+		}
+		account.setPassword(null);
+		request.getSession().setAttribute("accountToken", account.getId());
+		return "redirect:../signInSuccess";
+	}
 }
