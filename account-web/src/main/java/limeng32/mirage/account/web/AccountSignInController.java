@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value = "/signIn")
+// @RequestMapping(value = "/signIn")
 public class AccountSignInController {
 
 	@Autowired
@@ -27,12 +27,12 @@ public class AccountSignInController {
 	@Autowired
 	AccountService accountService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, value = "/signIn")
 	public String get() {
 		return "signIn";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/checkExist", params = "email")
+	@RequestMapping(method = RequestMethod.POST, value = "/signIn/checkExist", params = "email")
 	public String checkExist(@RequestParam("email") String email,
 			HttpServletRequest request, HttpServletResponse response,
 			ModelMap mm) throws IOException {
@@ -55,7 +55,7 @@ public class AccountSignInController {
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/signInTest")
+	@RequestMapping(method = RequestMethod.POST, value = "/signIn/signInTest")
 	public String signInTest(Account account, HttpServletRequest request,
 			HttpServletResponse response, ModelMap mm) throws IOException {
 		try {
@@ -69,7 +69,7 @@ public class AccountSignInController {
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/submitNew")
+	@RequestMapping(method = RequestMethod.POST, value = "/signIn/submitNew")
 	public String submitNew(Account ac, HttpServletRequest request,
 			HttpServletResponse response, ModelMap mm) throws IOException {
 		Account account = null;
@@ -80,6 +80,6 @@ public class AccountSignInController {
 		}
 		account.setPassword(null);
 		request.getSession().setAttribute("accountToken", account.getId());
-		return "redirect:../signInSuccess";
+		return "redirect:../";
 	}
 }

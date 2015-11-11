@@ -17,7 +17,7 @@ public class AccountController {
 	@Autowired
 	AccountService accountService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/signInSuccess")
+	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
 	public String getSignInSuccess() {
 		return "signInSuccess";
 	}

@@ -3,10 +3,10 @@ package limeng32.mirage.account.captcha;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +22,7 @@ public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 
 	private DefaultKaptcha producer;
 
-	private Map<String, String> captchaMap = new HashMap<String, String>();
+	private Map<String, String> captchaMap = new WeakHashMap<String, String>();
 
 	private List<String> preDefinedTexts;
 
