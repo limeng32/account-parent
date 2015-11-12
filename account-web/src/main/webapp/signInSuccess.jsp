@@ -17,7 +17,7 @@
                 {
                     name: 'account-front',
                     base: base,
-                    tag:  '2015111002',
+                    tag:  '2015111003',
                     ignorePackageNameInUri: true,
                     combine:false
                 }
@@ -41,6 +41,7 @@
 
 <script>
 var token = '${accountToken }';
+var auth = '${authToken}';
 KISSY.use('account-front/signInSuccessWrapper');
 </script>
 </body>

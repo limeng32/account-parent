@@ -1,5 +1,7 @@
 package limeng32.mirage.account.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
 
@@ -18,8 +20,8 @@ public class AccountController {
 	AccountService accountService;
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
-	public String getSignInSuccess() {
-		return "signInSuccess";
+	public String get(HttpServletRequest request) {
+		return "index";
 	}
 
 }

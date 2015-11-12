@@ -80,6 +80,7 @@ public class AccountSignInController {
 		}
 		account.setPassword(null);
 		request.getSession().setAttribute("accountToken", account.getId());
+		request.getSession().setAttribute("authToken", 5);
 		return "redirect:../";
 	}
 }
