@@ -21,6 +21,9 @@ public class AccountController {
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
 	public String get(HttpServletRequest request) {
+		if (request.getSession().getAttribute("accountToken") != null) {
+			request.setAttribute("authToken", 5);
+		}
 		return "index";
 	}
 
