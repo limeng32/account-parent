@@ -76,7 +76,8 @@ public class AccountSignInController {
 		try {
 			account = accountService.login(ac.getEmail(), ac.getPassword());
 		} catch (AccountServiceException e) {
-			response.sendError(400, e.getMessage());
+			// response.sendError(400, e.getMessage());
+			return "redirect:../signInError";
 		}
 		account.setPassword(null);
 		request.getSession().setAttribute("accountToken", account.getId());

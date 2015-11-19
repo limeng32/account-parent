@@ -39,4 +39,9 @@ public class AccountController {
 		mm.addAttribute("_content", true);
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
+
+	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signInError")
+	public String signInError(HttpServletRequest request) {
+		return "signInError";
+	}
 }

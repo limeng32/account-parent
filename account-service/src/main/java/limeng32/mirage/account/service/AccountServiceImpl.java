@@ -119,10 +119,11 @@ public class AccountServiceImpl implements AccountService {
 		case 1:
 			return accountC.toArray(new Account[1])[0];
 		case 0:
-			throw new AccountServiceException("Email or password is not exist.");
+			throw new AccountServiceException(
+					AccountServiceException.MessageEmailOrPasswordIsNotExist);
 		default:
 			throw new AccountServiceException(
-					"You account has problem. Please contact the admin.");
+					AccountServiceException.MessageYouAccountHasProblem);
 		}
 	}
 
