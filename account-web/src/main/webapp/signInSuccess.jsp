@@ -9,15 +9,12 @@
 	<link rel="stylesheet" href="//g.alicdn.com/kissy/k/1.4.8/??css/dpl/base-min.css,css/dpl/forms-min.css,button/assets/dpl-min.css">
     <script>
         var base = '${resourceRoot }/build';
-        if(KISSY.config('debug')){
-            base = 'http://localhost:5555/'
-        }
         KISSY.config({
             packages: [
                 {
                     name: 'account-front',
                     base: base,
-                    tag:  '2015111003',
+                    tag:  '2015112201',
                     ignorePackageNameInUri: true,
                     combine:false
                 }

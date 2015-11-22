@@ -14,7 +14,7 @@
                 {
                     name: 'account-front',
                     base: base,
-                    tag:  '2015112102',
+                    tag:  '2015112203',
                     ignorePackageNameInUri: true,
                     combine:false
                 }
@@ -24,7 +24,7 @@
 
 
     <script>
-    KISSY.importStyle('account-front/signInErrorWrapper.css');
+    KISSY.importStyle('account-front/signUpSuccessWrapper.css');
     </script>
 </head>
 <body>
@@ -39,7 +39,7 @@
 
 <script>
 var reason = '${reason}';
-KISSY.use('account-front/signInErrorWrapper');
+KISSY.use('account-front/signUpSuccessWrapper');
 </script>
 </body>
 </html>

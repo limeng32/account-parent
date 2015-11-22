@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-// @RequestMapping(value = "/signIn")
 public class AccountSignInController {
 
 	@Autowired
@@ -76,8 +75,19 @@ public class AccountSignInController {
 		try {
 			account = accountService.login(ac.getEmail(), ac.getPassword());
 		} catch (AccountServiceException e) {
-			// response.sendError(400, e.getMessage());
-			return "redirect:../signInError";
+			String errorName = "";
+			switch (e.getMessage()) {
+			case AccountServiceException.YourAccountHasProblem:
+				errorName = "YourAccountHasProblem";
+				break;
+			case AccountServiceException.EmailOrPasswordIsNotExist:
+				errorName = "EmailOrPasswordIsNotExist";
+				break;
+			case AccountServiceException.YourAccountNeedActivate:
+				errorName = "YourAccountNeedActivate";
+				break;
+			}
+			return "redirect:../signInError/" + errorName;
 		}
 		account.setPassword(null);
 		request.getSession().setAttribute("accountToken", account.getId());

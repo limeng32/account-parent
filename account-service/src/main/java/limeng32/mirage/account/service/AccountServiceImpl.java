@@ -93,15 +93,20 @@ public class AccountServiceImpl implements AccountService {
 		switch (accountC.size()) {
 		case 1:
 			Account account = accountC.toArray(new Account[1])[0];
+			if (account.getActivated()) {
+				throw new AccountServiceException(
+						AccountServiceException.ActivateRepetition);
+			}
 			account.setActivated(true);
 			account.setActivateValue("");
 			accountPersistService.update(account);
 			break;
 		case 0:
 			throw new AccountServiceException(
-					"Invalid activationKey or activationValue.");
+					AccountServiceException.ActivateMismatch);
 		default:
-			throw new AccountServiceException("Unable to activate.");
+			throw new AccountServiceException(
+					AccountServiceException.ActivateFail);
 		}
 	}
 
@@ -117,13 +122,19 @@ public class AccountServiceImpl implements AccountService {
 		Collection<Account> accountC = accountPersistService.selectAll(ac);
 		switch (accountC.size()) {
 		case 1:
-			return accountC.toArray(new Account[1])[0];
+			Account account = accountC.toArray(new Account[1])[0];
+			if (account.getActivated()) {
+				return account;
+			} else {
+				throw new AccountServiceException(
+						AccountServiceException.YourAccountNeedActivate);
+			}
 		case 0:
 			throw new AccountServiceException(
-					AccountServiceException.MessageEmailOrPasswordIsNotExist);
+					AccountServiceException.EmailOrPasswordIsNotExist);
 		default:
 			throw new AccountServiceException(
-					AccountServiceException.MessageYouAccountHasProblem);
+					AccountServiceException.YourAccountHasProblem);
 		}
 	}
 

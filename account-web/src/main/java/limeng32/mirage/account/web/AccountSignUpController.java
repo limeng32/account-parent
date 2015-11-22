@@ -134,32 +134,42 @@ public class AccountSignUpController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/submitNew", params = "captchaValue")
 	public String signUpSubmitNew(HttpServletRequest request,
-			HttpServletResponse response, ModelMap mm, Account account,
+			HttpServletResponse response, Account account,
 			@RequestParam("captchaValue") String captchaValue)
 			throws IOException {
-		boolean result = false;
 		try {
 			accountService.signUpNew(account, captchaValue,
 					request.getRemoteAddr());
-			result = true;
 		} catch (AccountServiceException e) {
-			response.sendError(400, e.getMessage());
+			String errorName = "SignUpFail";
+			return "redirect:../signInError/" + errorName;
 		}
-		System.out.println(":" + result);
-		mm.addAttribute("_content", "");
-		return UNIQUE_VIEW_NAME;
+		return "redirect:../signUpSuccess";
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/activate", params = {
 			"k", "v" })
 	public String activateAccount(@RequestParam("k") String activationKey,
 			@RequestParam("v") String activationValue,
-			HttpServletResponse response) throws IOException {
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		try {
 			accountService.activate(activationKey, activationValue);
 		} catch (AccountServiceException e) {
-			response.sendError(400, e.getMessage());
+			String errorName = "";
+			switch (e.getMessage()) {
+			case AccountServiceException.ActivateFail:
+				errorName = "ActivateFail";
+				break;
+			case AccountServiceException.ActivateMismatch:
+				errorName = "ActivateMismatch";
+				break;
+			case AccountServiceException.ActivateRepetition:
+				errorName = "ActivateRepetition";
+				break;
+			}
+			return "redirect:../signInError/" + errorName;
 		}
-		return null;
+		return "redirect:../signUpSuccess/ActivateSuccess";
 	}
 }
