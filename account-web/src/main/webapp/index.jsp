@@ -14,7 +14,7 @@
                 {
                     name: 'account-front',
                     base: base,
-                    tag:  '2015112003',
+                    tag:  '2015112902',
                     ignorePackageNameInUri: true,
                     combine:false
                 }

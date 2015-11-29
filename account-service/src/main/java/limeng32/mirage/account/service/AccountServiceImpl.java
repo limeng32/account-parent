@@ -95,7 +95,8 @@ public class AccountServiceImpl implements AccountService {
 			Account account = accountC.toArray(new Account[1])[0];
 			if (account.getActivated()) {
 				throw new AccountServiceException(
-						AccountServiceException.ActivateRepetition);
+						AccountServiceExceptionEnum.ActivateRepetition
+								.toString());
 			}
 			account.setActivated(true);
 			account.setActivateValue("");
@@ -103,10 +104,10 @@ public class AccountServiceImpl implements AccountService {
 			break;
 		case 0:
 			throw new AccountServiceException(
-					AccountServiceException.ActivateMismatch);
+					AccountServiceExceptionEnum.ActivateMismatch.toString());
 		default:
 			throw new AccountServiceException(
-					AccountServiceException.ActivateFail);
+					AccountServiceExceptionEnum.ActivateFail.toString());
 		}
 	}
 
@@ -126,15 +127,20 @@ public class AccountServiceImpl implements AccountService {
 			if (account.getActivated()) {
 				return account;
 			} else {
+				System.out.println(":"+AccountServiceExceptionEnum.YourAccountNeedActivate
+								.toString());
 				throw new AccountServiceException(
-						AccountServiceException.YourAccountNeedActivate);
+						AccountServiceExceptionEnum.YourAccountNeedActivate
+								.toString());
 			}
 		case 0:
 			throw new AccountServiceException(
-					AccountServiceException.EmailOrPasswordIsNotExist);
+					AccountServiceExceptionEnum.EmailOrPasswordIsNotExist
+							.toString());
 		default:
 			throw new AccountServiceException(
-					AccountServiceException.YourAccountHasProblem);
+					AccountServiceExceptionEnum.YourAccountHasProblem
+							.toString());
 		}
 	}
 

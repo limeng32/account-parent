@@ -110,8 +110,9 @@ public class AccountServiceTest {
 		try {
 			accountService.login(account.getEmail(), "admin456");
 		} catch (AccountServiceException e) {
-			Assert.assertEquals("Email or password is not exist.",
-					e.getMessage());
+			Assert.assertEquals(
+					AccountServiceExceptionEnum.EmailOrPasswordIsNotExist
+							.toString(), e.getMessage());
 		}
 	}
 

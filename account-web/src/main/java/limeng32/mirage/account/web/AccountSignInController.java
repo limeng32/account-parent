@@ -75,18 +75,7 @@ public class AccountSignInController {
 		try {
 			account = accountService.login(ac.getEmail(), ac.getPassword());
 		} catch (AccountServiceException e) {
-			String errorName = "";
-			switch (e.getMessage()) {
-			case AccountServiceException.YourAccountHasProblem:
-				errorName = "YourAccountHasProblem";
-				break;
-			case AccountServiceException.EmailOrPasswordIsNotExist:
-				errorName = "EmailOrPasswordIsNotExist";
-				break;
-			case AccountServiceException.YourAccountNeedActivate:
-				errorName = "YourAccountNeedActivate";
-				break;
-			}
+			String errorName = e.getMessage();
 			return "redirect:../signInError/" + errorName;
 		}
 		account.setPassword(null);

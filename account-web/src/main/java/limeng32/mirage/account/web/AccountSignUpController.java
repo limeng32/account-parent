@@ -156,20 +156,10 @@ public class AccountSignUpController {
 		try {
 			accountService.activate(activationKey, activationValue);
 		} catch (AccountServiceException e) {
-			String errorName = "";
-			switch (e.getMessage()) {
-			case AccountServiceException.ActivateFail:
-				errorName = "ActivateFail";
-				break;
-			case AccountServiceException.ActivateMismatch:
-				errorName = "ActivateMismatch";
-				break;
-			case AccountServiceException.ActivateRepetition:
-				errorName = "ActivateRepetition";
-				break;
-			}
+			String errorName = e.getMessage();
 			return "redirect:../signInError/" + errorName;
 		}
-		return "redirect:../signUpSuccess/ActivateSuccess";
+		return "redirect:../signUpSuccess/"
+				+ AccountWebEnum.ActivateSuccess.toString();
 	}
 }
