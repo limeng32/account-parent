@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +22,7 @@ public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 
 	private DefaultKaptcha producer;
 
-	private Map<String, String> captchaMap = new WeakHashMap<String, String>();
+	private Map<String, String> captchaMap = new ConcurrentHashMap<String, String>();
 
 	private List<String> preDefinedTexts;
 
