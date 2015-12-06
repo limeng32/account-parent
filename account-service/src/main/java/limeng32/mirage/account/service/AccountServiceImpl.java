@@ -127,8 +127,6 @@ public class AccountServiceImpl implements AccountService {
 			if (account.getActivated()) {
 				return account;
 			} else {
-				System.out.println(":"+AccountServiceExceptionEnum.YourAccountNeedActivate
-								.toString());
 				throw new AccountServiceException(
 						AccountServiceExceptionEnum.YourAccountNeedActivate
 								.toString());
