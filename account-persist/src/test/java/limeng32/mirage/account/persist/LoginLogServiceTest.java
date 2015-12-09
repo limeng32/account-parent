@@ -62,13 +62,13 @@ public class LoginLogServiceTest {
 	// loginLogService.update(l);
 	// }
 
-	@Test
+	// @Test
 	public void testLoginLogServiceSelect2() {
 		LoginLog l = loginLogService.select(2);
 		assertNotNull(l.getAccount());
 	}
 
-	@Test
+	// @Test
 	public void testLoginLogServiceLoad() {
 		Account a = accountService.select(1);
 		accountService.loadLoginLog(a, new LoginLog());

@@ -27,7 +27,7 @@ public class AccountPersistServiceTest {
 		assertNotNull(dataSource.getUsername());
 	}
 
-	@Test
+	// @Test
 	public void testAccountService() {
 		Account a = accountService.select(1);
 		assertNotNull(a);
@@ -46,7 +46,7 @@ public class AccountPersistServiceTest {
 	// accountService.insert(a);
 	// }
 
-	@Test
+	// @Test
 	public void testBooleanHandler() {
 		Account a = accountService.select(1);
 		Assert.assertTrue(a.getActivated());
