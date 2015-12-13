@@ -21,4 +21,9 @@
 		<property name="activateEmailBody" value="${account.activateEmailBody}" />
 	</bean>
 
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
 </beans>

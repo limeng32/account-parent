@@ -15,6 +15,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -30,12 +31,16 @@ import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
-		DbUnitTestExecutionListener.class })
+		DbUnitTestExecutionListener.class,
+		TransactionDbUnitTestExecutionListener.class })
 @DbUnitConfiguration(dataSetLoader = FlatXmlDataSetLoader.class)
 public class UnitilsSpringTest {
 
 	@Autowired
 	private AccountPersistService accountPersistService;
+
+	@Autowired
+	private AccountService accountService;
 
 	// @Test
 	// public void testSpringBean() {
@@ -46,9 +51,14 @@ public class UnitilsSpringTest {
 	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/dbunitTest-updateA.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/dbunitTest-updateE.xml")
 	@DatabaseTearDown(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/dbunitTest-updateO.xml")
-	public void findUserByUserName() {
+	public void testSelf() {
 		Account a = accountPersistService.select(1);
 		Assert.assertNotNull(a);
 		Assert.assertEquals("john", a.getName());
+	}
+
+	@Test
+	public void testTransaction() {
+		accountService.TransactiveInsert(null);
 	}
 }

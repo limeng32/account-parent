@@ -13,6 +13,8 @@ import limeng32.mirage.account.persist.AccountPersistService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -194,6 +196,12 @@ public class AccountServiceImpl implements AccountService {
 		default:
 			return true;
 		}
+	}
+
+	@Override
+	@Transactional(noRollbackFor = { RuntimeException.class }, readOnly = false, propagation = Propagation.REQUIRED)
+	public void TransactiveInsert(Account account) {
+
 	}
 
 }

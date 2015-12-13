@@ -20,4 +20,6 @@ public interface AccountService {
 	Account login(String email, String password) throws AccountServiceException;
 
 	boolean test(String email, String password) throws AccountServiceException;
+
+	void TransactiveInsert(Account account);
 }
