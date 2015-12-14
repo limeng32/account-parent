@@ -50,8 +50,15 @@ public class AccountController {
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signInError/{errorName}")
 	public String signInError2(HttpServletRequest request,
 			@PathVariable String errorName) {
-		request.setAttribute("reason",
-				AccountServiceExceptionEnum.valueOf(errorName).description());
+		String reason = null;
+		try {
+			AccountServiceExceptionEnum asee = AccountServiceExceptionEnum
+					.valueOf(errorName);
+			reason = asee.description();
+		} catch (IllegalArgumentException e) {
+			reason = "未知异常";
+		}
+		request.setAttribute("reason", reason);
 		return "signInError";
 	}
 
