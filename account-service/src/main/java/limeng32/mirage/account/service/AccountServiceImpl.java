@@ -199,9 +199,16 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	@Transactional(noRollbackFor = { RuntimeException.class }, readOnly = false, propagation = Propagation.REQUIRED)
-	public void TransactiveInsert(Account account) {
-
+	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED)
+	public void transactiveInsert(Account account)
+			throws AccountServiceException {
+		accountPersistService.insert(account);
+		Account ac = new Account();
+		ac.setEmail(account.getEmail());
+		int c = accountPersistService.count(ac);
+		if (c > 1) {
+			throw new AccountServiceException("Repetition email.");
+		}
 	}
 
 }

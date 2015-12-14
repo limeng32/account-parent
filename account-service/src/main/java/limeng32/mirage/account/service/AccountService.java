@@ -21,5 +21,6 @@ public interface AccountService {
 
 	boolean test(String email, String password) throws AccountServiceException;
 
-	void TransactiveInsert(Account account);
+	void transactiveInsert(Account account) throws AccountServiceException;
+
 }

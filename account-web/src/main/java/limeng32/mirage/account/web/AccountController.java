@@ -5,8 +5,10 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
+import limeng32.mirage.account.service.AccountServiceException;
 import limeng32.mirage.account.service.AccountServiceExceptionEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,5 +75,29 @@ public class AccountController {
 		request.setAttribute("reason", AccountWebEnum.valueOf(successName)
 				.description());
 		return "signUpSuccess";
+	}
+
+	@RequestMapping(value = "/tx")
+	public void tx() {
+		Account a = new Account();
+		a.setName("unknown");
+		a.setEmail("limeng32@live.cn");
+		try {
+			accountService.transactiveInsert(a);
+		} catch (AccountServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/tx2")
+	public void tx2() {
+		Account a = new Account();
+		a.setName("unknown2");
+		a.setEmail("limeng3210@live.cn");
+		try {
+			accountService.transactiveInsert(a);
+		} catch (AccountServiceException e) {
+			e.printStackTrace();
+		}
 	}
 }
