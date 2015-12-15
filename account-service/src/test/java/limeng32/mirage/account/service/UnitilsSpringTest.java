@@ -12,7 +12,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
@@ -30,7 +29,6 @@ import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
 		"classpath:account-service.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
-		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
 @DbUnitConfiguration(dataSetLoader = FlatXmlDataSetLoader.class)
@@ -42,11 +40,6 @@ public class UnitilsSpringTest {
 	@Autowired
 	private AccountService accountService;
 
-	// @Test
-	// public void testSpringBean() {
-	// Assert.assertNotNull(accountPersistService.select(1));
-	// }
-
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/dbunitTest-updateA.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/dbunitTest-updateE.xml")
@@ -57,12 +50,24 @@ public class UnitilsSpringTest {
 		Assert.assertEquals("john", a.getName());
 	}
 
-//	@Test
+	@Test
+	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.teardown.xml")
 	public void testTransaction() {
+		Account a = new Account();
+		a.setName("unknown");
+		a.setEmail("limeng32@live.cn");
 		try {
-			accountService.transactiveInsert(null);
-		} catch (Exception e) {
-			e.printStackTrace();
+			accountService.transactiveInsert(a);
+		} catch (AccountServiceException e) {
+			switch (e.getMessage()) {
+			case "Repetition email.":
+				break;
+			default:
+				e.printStackTrace();
+				break;
+			}
 		}
 	}
 }
