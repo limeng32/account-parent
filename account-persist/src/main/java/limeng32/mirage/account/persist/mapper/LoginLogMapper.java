@@ -17,10 +17,10 @@ public interface LoginLogMapper extends MapperFace<LoginLog> {
 	public void insert(LoginLog t);
 
 	@Override
-	public void update(LoginLog t);
+	public int update(LoginLog t);
 
 	@Override
-	public void updatePersistent(LoginLog t);
+	public int updatePersistent(LoginLog t);
 
 	@Override
 	public void retrieve(LoginLog t);
@@ -29,7 +29,7 @@ public interface LoginLogMapper extends MapperFace<LoginLog> {
 	public void retrieveOnlyNull(LoginLog t);
 
 	@Override
-	public void delete(LoginLog t);
+	public int delete(LoginLog t);
 
 	@Override
 	public int count(LoginLog t);

@@ -29,8 +29,8 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 	}
 
 	@Override
-	public void update(Account t) {
-		supportUpdate(mapper, t);
+	public int update(Account t) {
+		return supportUpdate(mapper, t);
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 	}
 
 	@Override
-	public void updatePersistent(Account t) {
-		supportUpdatePersistent(mapper, t);
+	public int updatePersistent(Account t) {
+		return supportUpdatePersistent(mapper, t);
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 	}
 
 	@Override
-	public void delete(Account t) {
-		supportDelete(mapper, t);
+	public int delete(Account t) {
+		return supportDelete(mapper, t);
 	}
 
 	@Override

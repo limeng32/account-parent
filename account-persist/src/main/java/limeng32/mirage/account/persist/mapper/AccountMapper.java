@@ -18,10 +18,10 @@ public interface AccountMapper extends MapperFace<Account> {
 	public void insert(Account t);
 
 	@Override
-	public void update(Account t);
+	public int update(Account t);
 
 	@Override
-	public void updatePersistent(Account t);
+	public int updatePersistent(Account t);
 
 	@Override
 	public void retrieve(Account t);
@@ -30,7 +30,7 @@ public interface AccountMapper extends MapperFace<Account> {
 	public void retrieveOnlyNull(Account t);
 
 	@Override
-	public void delete(Account t);
+	public int delete(Account t);
 
 	@Override
 	public int count(Account t);

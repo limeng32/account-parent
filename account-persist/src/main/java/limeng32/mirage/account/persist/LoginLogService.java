@@ -26,8 +26,8 @@ public class LoginLogService extends ServiceSupport<LoginLog> implements
 	}
 
 	@Override
-	public void update(LoginLog t) {
-		supportUpdate(mapper, t);
+	public int update(LoginLog t) {
+		return supportUpdate(mapper, t);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class LoginLogService extends ServiceSupport<LoginLog> implements
 	}
 
 	@Override
-	public void updatePersistent(LoginLog t) {
-		supportUpdatePersistent(mapper, t);
+	public int updatePersistent(LoginLog t) {
+		return supportUpdatePersistent(mapper, t);
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class LoginLogService extends ServiceSupport<LoginLog> implements
 	}
 
 	@Override
-	public void delete(LoginLog t) {
-		supportDelete(mapper, t);
+	public int delete(LoginLog t) {
+		return supportDelete(mapper, t);
 	}
 
 	@Override
