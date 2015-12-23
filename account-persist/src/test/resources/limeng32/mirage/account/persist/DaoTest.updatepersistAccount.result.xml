@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<account ID="1" NAME="mary" EMAIL="john@l.cn" ACTIVATED="1"
+		ACTIVATEVALUE="" OPLOCK="1" />
+</dataset>

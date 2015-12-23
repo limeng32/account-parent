@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import limeng32.mirage.util.pojo.PojoSupport;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.FieldMapperAnnotation;
+import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.OpLockType;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.TableMapperAnnotation;
 
 import org.apache.ibatis.type.JdbcType;
@@ -26,6 +27,9 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	@FieldMapperAnnotation(dbFieldName = "password", jdbcType = JdbcType.VARCHAR)
 	private java.lang.String password;
+
+	@FieldMapperAnnotation(dbFieldName = "opLock", jdbcType = JdbcType.INTEGER, opLockType = OpLockType.Version)
+	private Integer opLock;
 
 	/**
 	 * 是否已激活
@@ -85,6 +89,10 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	public void setActivateValue(java.lang.String activateValue) {
 		this.activateValue = activateValue;
+	}
+
+	public Integer getOpLock() {
+		return opLock;
 	}
 
 	public java.util.Collection<LoginLog> getLoginLog() {

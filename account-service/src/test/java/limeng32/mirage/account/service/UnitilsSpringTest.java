@@ -51,9 +51,9 @@ public class UnitilsSpringTest {
 		Assert.assertEquals(1, accountPersistService.update(a));
 		Account a2 = new Account();
 		a2.setName("asd");
-		accountPersistService.insert(a2);
-		Assert.assertEquals(1, accountPersistService.updatePersistent(a2));
-		Assert.assertEquals(1, accountPersistService.delete(a2));
+//		accountPersistService.insert(a2);
+//		Assert.assertEquals(1, accountPersistService.updatePersistent(a2));
+//		Assert.assertEquals(1, accountPersistService.delete(a2));
 	}
 
 	@Test
