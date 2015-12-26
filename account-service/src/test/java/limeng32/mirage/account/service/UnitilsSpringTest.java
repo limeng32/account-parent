@@ -2,6 +2,7 @@ package limeng32.mirage.account.service;
 
 import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
+import limeng32.mybatis.mybatisPlugin.util.ReflectHelper;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +15,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -29,8 +29,7 @@ import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
 		"classpath:account-service.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
-		DbUnitTestExecutionListener.class,
-		TransactionDbUnitTestExecutionListener.class })
+		DbUnitTestExecutionListener.class })
 @DbUnitConfiguration(dataSetLoader = FlatXmlDataSetLoader.class)
 public class UnitilsSpringTest {
 
@@ -41,26 +40,42 @@ public class UnitilsSpringTest {
 	private AccountService accountService;
 
 	@Test
-	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/dbunitTest-updateA.xml")
-	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/dbunitTest-updateE.xml")
-	@DatabaseTearDown(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/dbunitTest-updateO.xml")
-	public void testSelf() {
-		Account a = accountPersistService.select(1);
-		Assert.assertNotNull(a);
-		Assert.assertEquals("john", a.getName());
-		Assert.assertEquals(1, accountPersistService.update(a));
-		Account a2 = new Account();
-		a2.setName("asd");
-//		accountPersistService.insert(a2);
-//		Assert.assertEquals(1, accountPersistService.updatePersistent(a2));
-//		Assert.assertEquals(1, accountPersistService.delete(a2));
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.xml")
+	public void testSelf() throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException {
+		Account ac = new Account();
+		ReflectHelper.setValueByFieldName(ac, "id", 1);
+		ac.setName("john");
+		ac.setEmail("john@l.c");
+		ac.setPassword("5a690d842935c51f26f473e025c1b97a");
+		ac.setActivated(true);
+		ac.setActivateValue("");
+		accountPersistService.insert(ac);
+		Account a1 = accountPersistService.select(1);
+		Account a2 = accountPersistService.select(1);
+		a1.setName("mary");
+		a2.setName("mary");
+		accountPersistService.update(a1);
+		accountPersistService.update(a2);
 	}
 
 	@Test
-	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.result.xml")
-	@DatabaseTearDown(type = DatabaseOperation.CLEAN_INSERT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.teardown.xml")
-	public void testTransaction() {
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
+	public void testTransaction() throws SecurityException,
+			NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException {
+		Account ac1 = new Account();
+		ReflectHelper.setValueByFieldName(ac1, "id", 1);
+		ac1.setName("limeng32");
+		ac1.setEmail("limeng32@live.cn");
+		ac1.setPassword("5a690d842935c51f26f473e025c1b97a");
+		ac1.setActivated(true);
+		ac1.setActivateValue("");
+		accountPersistService.insert(ac1);
 		Account a = new Account();
 		a.setName("unknown");
 		a.setEmail("limeng32@live.cn");
@@ -75,5 +90,23 @@ public class UnitilsSpringTest {
 				break;
 			}
 		}
+	}
+
+	@Test
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction2.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction2.xml")
+	public void testTransaction2() throws SecurityException,
+			NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException {
+		Account ac1 = new Account();
+		ReflectHelper.setValueByFieldName(ac1, "id", 1);
+		ac1.setName("limeng321");
+		ac1.setEmail("limeng32@live.cn");
+		ac1.setPassword("5a690d842935c51f26f473e025c1b97a");
+		ac1.setActivated(true);
+		ac1.setActivateValue("");
+		accountPersistService.insert(ac1);
+		Account a = accountPersistService.select(1);
+		Assert.assertEquals("limeng321", a.getName());
 	}
 }
