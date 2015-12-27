@@ -32,35 +32,20 @@ public class LoginLogServiceTest {
 		assertNotNull(dataSource.getUsername());
 	}
 
-	@Test
+	// @Test
 	public void testLoginLogServiceSelect() {
 		LoginLog l = loginLogService.select(1);
 		assertNotNull(l);
 	}
 
 	// @Test
-	// public void testLoginLogServiceInsert() {
-	// LoginLog l = new LoginLog();
-	// l.setAccount(accountService.select(1));
-	// l.setLoginIP("testLoginLogServiceInsert");
-	// loginLogService.insert(l);
-	// }
-
-	// @Test
-	// public void testLoginLogServiceInsert2() {
-	// LoginLog l = new LoginLog();
-	// l.setLoginIP("testLoginLogServiceInsert2");
-	// loginLogService.insert(l);
-	// loginLogService.retrieveOnlyNull(l);
-	// assertNotNull(l.getLoginTime());
-	// }
-
-	// @Test
-	// public void testLoginLogServiceInsert3() {
-	// LoginLog l = loginLogService.select(4);
-	// l.setLoginTime(new Date());
-	// loginLogService.update(l);
-	// }
+	public void testLoginLogServiceInsert2() {
+		LoginLog l = new LoginLog();
+		l.setLoginIP("testLoginLogServiceInsert2");
+		loginLogService.insert(l);
+		loginLogService.retrieveOnlyNull(l);
+		assertNotNull(l.getLoginTime());
+	}
 
 	// @Test
 	public void testLoginLogServiceSelect2() {
@@ -78,7 +63,7 @@ public class LoginLogServiceTest {
 				Matchers.greaterThan(loginLogArray[0].getId()));
 	}
 
-	@Test
+	// @Test
 	public void testLoginLogServiceSelectAll() {
 		Collection<LoginLog> c = loginLogService.selectAll(new LoginLog());
 		LoginLog[] loginLogArray = new LoginLog[c.size()];
@@ -87,7 +72,7 @@ public class LoginLogServiceTest {
 				Matchers.greaterThan(loginLogArray[0].getId()));
 	}
 
-	@Test
+	// @Test
 	public void testLoginLogServiceSelectAll2() {
 		Collection<LoginLog> c = loginLogService.selectAll(new LoginLog());
 		int origin = c.size();
@@ -97,7 +82,7 @@ public class LoginLogServiceTest {
 		Assert.assertEquals(1, latest - origin);
 	}
 
-	@Test
+	// @Test
 	public void testRemoveSetId() {
 		LoginLog l = loginLogService.select(1);
 		Assert.assertEquals(0, l.getId() - 1);

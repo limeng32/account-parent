@@ -1,5 +1,7 @@
 package limeng32.mirage.account.persist;
 
+import java.util.Collection;
+
 import limeng32.mybatis.mybatisPlugin.util.ReflectHelper;
 
 import org.junit.Assert;
@@ -31,6 +33,9 @@ public class DaoTest {
 
 	@Autowired
 	private AccountPersistService accountPersistService;
+
+	@Autowired
+	private LoginLogService loginLogService;
 
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.updateAccount.xml")
@@ -99,5 +104,61 @@ public class DaoTest {
 		Assert.assertEquals(1, i);
 		Account a2 = accountPersistService.select(1);
 		Assert.assertNull(a2);
+	}
+
+	@Test
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.updateLoginLog.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/persist/DaoTest.updateLoginLog.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.updateLoginLog.xml")
+	public void updateLoginLog() throws SecurityException,
+			NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException {
+		LoginLog ll = new LoginLog();
+		ReflectHelper.setValueByFieldName(ll, "id", 1);
+		ll.setLoginIP("2222");
+		loginLogService.insert(ll);
+
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				LoginLog log1 = loginLogService.select(1);
+				try {
+					Thread.sleep(6000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				LoginLog lc = new LoginLog();
+				lc.setLoginIP("1111");
+				Collection<LoginLog> logC = loginLogService.selectAll(lc);
+				LoginLog[] logs = logC.toArray(new LoginLog[logC.size()]);
+				log1 = logs[0];
+				log1.setLoginIP("2222");
+				loginLogService.update(log1);
+			}
+		});
+
+		Thread t2 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				LoginLog log1 = loginLogService.select(1);
+				log1.setLoginIP("1111");
+				loginLogService.update(log1);
+			}
+		});
+
+		t1.start();
+
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		t2.start();
+		try {
+			Thread.sleep(8000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
