@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import limeng32.mirage.account.persist.Account;
-import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
 import limeng32.mirage.account.service.AccountServiceException;
 
@@ -21,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AccountSignInController {
 
 	@Autowired
-	AccountPersistService accountPersistService;
-
-	@Autowired
 	AccountService accountService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/signIn")
@@ -35,22 +31,11 @@ public class AccountSignInController {
 	public String checkExist(@RequestParam("email") String email,
 			HttpServletRequest request, HttpServletResponse response,
 			ModelMap mm) throws IOException {
-		Account ac = new Account();
-		ac.setEmail(email);
-		int count = accountPersistService.count(ac);
-		boolean result = false;
-		switch (count) {
-		case 1:
-			result = true;
-			break;
-		case 0:
-			result = false;
-			break;
-		default:
-			result = true;
-			break;
+		try {
+			mm.addAttribute("_content", accountService.checkExist(email));
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
 		}
-		mm.addAttribute("_content", result);
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
 

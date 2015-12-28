@@ -6,8 +6,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import limeng32.mirage.account.captcha.AccountCaptchaException;
-import limeng32.mirage.account.captcha.AccountCaptchaService;
 import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
@@ -32,9 +30,6 @@ public class AccountSignUpController {
 	@Autowired
 	AccountService accountService;
 
-	@Autowired
-	AccountCaptchaService accountCaptchaService;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String get() {
 		return "signUp";
@@ -44,10 +39,10 @@ public class AccountSignUpController {
 	public String getCaptcha(ModelMap mm, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		try {
-			String captchaText = accountCaptchaService
-					.generateCaptchaKeyNew(request.getRemoteHost());
+			String captchaText = accountService.generateCaptchaKeyNew(request
+					.getRemoteHost());
 			mm.addAttribute("_content", captchaText);
-		} catch (AccountCaptchaException e) {
+		} catch (AccountServiceException e) {
 			response.sendError(400, e.getMessage());
 		}
 		return UNIQUE_VIEW_NAME;
@@ -58,31 +53,14 @@ public class AccountSignUpController {
 			HttpServletResponse response) throws IOException {
 		response.setContentType("image/jpeg");
 		try {
-			String captchaText = accountCaptchaService
-					.generateCaptchaKeyNew(request.getRemoteHost());
+			String captchaText = accountService.generateCaptchaKeyNew(request
+					.getRemoteHost());
 			ServletOutputStream out = response.getOutputStream();
-			out.write(accountCaptchaService
-					.generateCaptchaImageNew(captchaText));
+			out.write(accountService.generateCaptchaImageNew(captchaText));
 			out.close();
-		} catch (IOException | AccountCaptchaException e) {
+		} catch (IOException | AccountServiceException e) {
 			response.sendError(400, e.getMessage());
 		}
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/verify", params = "captchaValue")
-	public String verifyCaptcha(
-			@RequestParam("captchaValue") String captchaValue,
-			HttpServletRequest request, HttpServletResponse response,
-			ModelMap mm) throws IOException {
-		boolean result = false;
-		try {
-			result = accountCaptchaService.validateCaptchaNew(
-					request.getRemoteAddr(), captchaValue);
-		} catch (AccountCaptchaException e) {
-			response.sendError(400, e.getMessage());
-		}
-		mm.addAttribute("_content", result);
-		return UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/submit", params = "captchaValue")
@@ -106,14 +84,11 @@ public class AccountSignUpController {
 	public String checkUnique(@RequestParam("email") String email,
 			HttpServletRequest request, HttpServletResponse response,
 			ModelMap mm) throws IOException {
-		Account ac = new Account();
-		ac.setEmail(email);
-		int count = accountPersistService.count(ac);
-		boolean result = false;
-		if (count == 0) {
-			result = true;
+		try {
+			mm.addAttribute("_content", accountService.checkUnique(email));
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
 		}
-		mm.addAttribute("_content", result);
 		return UNIQUE_VIEW_NAME;
 	}
 
@@ -123,9 +98,9 @@ public class AccountSignUpController {
 			ModelMap mm) throws IOException {
 		boolean result = false;
 		try {
-			result = accountCaptchaService.checkCaptcha(
-					request.getRemoteAddr(), captValue);
-		} catch (AccountCaptchaException e) {
+			result = accountService.checkCaptcha(request.getRemoteAddr(),
+					captValue);
+		} catch (AccountServiceException e) {
 			response.sendError(400, e.getMessage());
 		}
 		mm.addAttribute("_content", result);

@@ -3,13 +3,12 @@ package limeng32.mirage.account.service;
 import limeng32.mirage.account.persist.Account;
 
 public interface AccountService {
-	String generateCaptchaKey() throws AccountServiceException;
 
-	byte[] generateCaptchaImage(String captchaKey)
+	String generateCaptchaKeyNew(String remoteIP)
 			throws AccountServiceException;
 
-	void signUp(Account account, String captchaKey, String captchaValue,
-			String activateServiceUrl) throws AccountServiceException;
+	byte[] generateCaptchaImageNew(String captchaText)
+			throws AccountServiceException;
 
 	void signUpNew(Account account, String captchaValue, String remoteIP)
 			throws AccountServiceException;
@@ -17,10 +16,20 @@ public interface AccountService {
 	void activate(String activationKey, String activationValue)
 			throws AccountServiceException;
 
+	boolean validateCaptchaNew(String remoteIP, String captchaValue)
+			throws AccountServiceException;
+
+	boolean checkCaptcha(String remoteIP, String captchaValue)
+			throws AccountServiceException;
+
 	Account login(String email, String password) throws AccountServiceException;
 
 	boolean test(String email, String password) throws AccountServiceException;
 
 	void transactiveInsert(Account account) throws AccountServiceException;
+
+	boolean checkExist(String email) throws AccountServiceException;
+
+	boolean checkUnique(String email) throws AccountServiceException;
 
 }

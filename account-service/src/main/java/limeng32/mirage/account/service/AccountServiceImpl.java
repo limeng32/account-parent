@@ -32,56 +32,6 @@ public class AccountServiceImpl implements AccountService {
 	private AccountServiceConfig accountServiceConfig;
 
 	@Override
-	public String generateCaptchaKey() throws AccountServiceException {
-		try {
-			return accountCaptchaService.generateCaptchaKey();
-		} catch (AccountCaptchaException e) {
-			throw new AccountServiceException(
-					"Unable to generate Captcha key.", e);
-		}
-	}
-
-	@Override
-	public byte[] generateCaptchaImage(String captchaKey)
-			throws AccountServiceException {
-		try {
-			return accountCaptchaService.generateCaptchaImage(captchaKey);
-		} catch (AccountCaptchaException e) {
-			throw new AccountServiceException(
-					"Unable to generate Captcha Image.", e);
-		}
-	}
-
-	@Override
-	public void signUp(Account account, String captchaKey, String captchaValue,
-			String activateServiceUrl) throws AccountServiceException {
-		String originPassword = account.getPassword();
-		try {
-			if (!accountCaptchaService
-					.validateCaptcha(captchaKey, captchaValue)) {
-				throw new AccountServiceException("Incorrect Captcha.");
-			}
-			account.setPassword(DigestUtils.md5Hex(account.getPassword()));
-			accountPersistService.insert(account);
-			String activationId = RandomGenerator.getRandomString();
-			account.setActivateValue(activationId);
-			accountPersistService.update(account);
-			String link = activateServiceUrl.endsWith("/") ? activateServiceUrl
-					: activateServiceUrl + "?";
-			link += "k=" + account.getEmail() + "&v=" + activationId;
-			accountEmailService.sendMail(account.getEmail(),
-					"Please Activate Your Account", link);
-		} catch (AccountCaptchaException e) {
-			throw new AccountServiceException("Unable to validate captcha.", e);
-		} catch (AccountEmailException e) {
-			throw new AccountServiceException(
-					"Unable to send actiavtion mail.", e);
-		} finally {
-			account.setPassword(originPassword);
-		}
-	}
-
-	@Override
 	public void activate(String activationKey, String activationValue)
 			throws AccountServiceException {
 		if (activationKey == null || activationValue == null) {
@@ -209,6 +159,81 @@ public class AccountServiceImpl implements AccountService {
 		if (c > 1) {
 			throw new AccountServiceException("Repetition email.");
 		}
+	}
+
+	@Override
+	public String generateCaptchaKeyNew(String remoteIP)
+			throws AccountServiceException {
+		try {
+			return accountCaptchaService.generateCaptchaKeyNew(remoteIP);
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException(
+					"Unable to generate Captcha Key.", e);
+		}
+	}
+
+	@Override
+	public byte[] generateCaptchaImageNew(String captchaText)
+			throws AccountServiceException {
+		try {
+			return accountCaptchaService.generateCaptchaImageNew(captchaText);
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException(
+					"Unable to generate Captcha Image.", e);
+		}
+	}
+
+	@Override
+	public boolean validateCaptchaNew(String remoteIP, String captchaValue)
+			throws AccountServiceException {
+		try {
+			return accountCaptchaService.validateCaptchaNew(remoteIP,
+					captchaValue);
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException("Unable to validate Captcha.", e);
+		}
+	}
+
+	@Override
+	public boolean checkCaptcha(String remoteIP, String captchaValue)
+			throws AccountServiceException {
+		try {
+			return accountCaptchaService.checkCaptcha(remoteIP, captchaValue);
+		} catch (AccountCaptchaException e) {
+			throw new AccountServiceException("Unable to check Captcha.", e);
+		}
+	}
+
+	@Override
+	public boolean checkExist(String email) throws AccountServiceException {
+		Account ac = new Account();
+		ac.setEmail(email);
+		int count = accountPersistService.count(ac);
+		boolean result = false;
+		switch (count) {
+		case 1:
+			result = true;
+			break;
+		case 0:
+			result = false;
+			break;
+		default:
+			result = true;
+			break;
+		}
+		return result;
+	}
+
+	@Override
+	public boolean checkUnique(String email) throws AccountServiceException {
+		Account ac = new Account();
+		ac.setEmail(email);
+		int count = accountPersistService.count(ac);
+		boolean result = false;
+		if (count == 0) {
+			result = true;
+		}
+		return result;
 	}
 
 }

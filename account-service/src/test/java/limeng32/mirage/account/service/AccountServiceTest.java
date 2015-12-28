@@ -57,9 +57,10 @@ public class AccountServiceTest {
 	public void testAccountService() throws Exception {
 
 		// 1. Get captcha
-		String captchaKey = accountService.generateCaptchaKey();
-		accountService.generateCaptchaImage(captchaKey);
-		String captchaValue = "abcde";
+		String remoteIP = "0.0.0.1";
+		String captchaKey = accountService.generateCaptchaKeyNew(remoteIP);
+		accountService.generateCaptchaImageNew(captchaKey);
+		// String captchaValue = "abcde";
 
 		// 2. Submit sign up Request
 		Account account = new Account();
@@ -67,17 +68,14 @@ public class AccountServiceTest {
 		account.setEmail(RandomGenerator.getRandomString(8) + "@live.cn");
 		account.setPassword(RandomGenerator.getRandomString(8));
 		account.setActivated(false);
-		accountService.signUp(account, captchaKey, captchaValue,
-				"http://localhost:8080/account/activate");
+		accountService.signUpNew(account, captchaKey, remoteIP);
 
 		// 3. Read activation link
 		greenMail.waitForIncomingEmail(2000, 1);
 		Message[] msgs = greenMail.getReceivedMessages();
 		Assert.assertEquals(1, msgs.length);
-		Assert.assertEquals("Please Activate Your Account",
-				msgs[0].getSubject());
+		Assert.assertEquals("Welcome to Mirage!", msgs[0].getSubject());
 		String activationLink = GreenMailUtil.getBody(msgs[0]).trim();
-
 		// 3a. Try login but not activated
 		try {
 			Account a = accountService.login(account.getEmail(),
@@ -93,8 +91,9 @@ public class AccountServiceTest {
 		Assert.assertNotNull(accountServiceConfig.getActivateUrl());
 
 		// 4. Activate account
-		String activationValue = activationLink.substring(activationLink
-				.lastIndexOf("=") + 1);
+		String activationValue = activationLink.substring(
+				activationLink.lastIndexOf("=") + 1,
+				activationLink.lastIndexOf("<"));
 		activationLink = activationLink.substring(0,
 				activationLink.lastIndexOf("&"));
 		String activationKey = activationLink.substring(activationLink

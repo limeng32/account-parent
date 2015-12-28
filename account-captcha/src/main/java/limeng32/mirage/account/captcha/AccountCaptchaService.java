@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface AccountCaptchaService {
 
-	String generateCaptchaKey() throws AccountCaptchaException;
-
 	String generateCaptchaKeyNew(String remoteIP)
 			throws AccountCaptchaException;
 
@@ -13,12 +11,6 @@ public interface AccountCaptchaService {
 			throws AccountCaptchaException;
 
 	boolean validateCaptchaNew(String remoteIP, String captchaValue)
-			throws AccountCaptchaException;
-
-	byte[] generateCaptchaImage(String captchaKey)
-			throws AccountCaptchaException;
-
-	boolean validateCaptcha(String captchaKey, String captchaValue)
 			throws AccountCaptchaException;
 
 	boolean checkCaptcha(String remoteIP, String captchaValue)

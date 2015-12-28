@@ -38,60 +38,6 @@ public class AccountCaptchaServiceImpl implements AccountCaptchaService,
 	}
 
 	@Override
-	public String generateCaptchaKey() throws AccountCaptchaException {
-		String key = RandomGenerator.getRandomString();
-
-		String value = getCaptchaText();
-
-		captchaMap.put(key, value);
-
-		return key;
-	}
-
-	@Override
-	public byte[] generateCaptchaImage(String captchaKey)
-			throws AccountCaptchaException {
-		String text = captchaMap.get(captchaKey);
-
-		if (text == null) {
-			throw new AccountCaptchaException("Captch key '" + captchaKey
-					+ "' not found!");
-		}
-
-		BufferedImage image = producer.createImage(text);
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		try {
-			ImageIO.write(image, "jpg", out);
-		} catch (IOException e) {
-			throw new AccountCaptchaException(
-					"Failed to write captcha stream!", e);
-		}
-
-		return out.toByteArray();
-	}
-
-	@Override
-	public boolean validateCaptcha(String captchaKey, String captchaValue)
-			throws AccountCaptchaException {
-		String text = captchaMap.get(captchaKey);
-
-		if (text == null) {
-			throw new AccountCaptchaException("Captch key '" + captchaKey
-					+ "' not found!");
-		}
-
-		if (text.equals(captchaValue)) {
-			captchaMap.remove(captchaKey);
-
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
 	public List<String> getPreDefinedTexts() {
 		return preDefinedTexts;
 	}
