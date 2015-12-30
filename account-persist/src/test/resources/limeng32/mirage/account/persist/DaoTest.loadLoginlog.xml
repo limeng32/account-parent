@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<account ID="1" NAME="john" EMAIL="john@l.c"
+		PASSWORD="5a690d842935c51f26f473e025c1b97a" ACTIVATED="1"
+		ACTIVATEVALUE="" OPLOCK="0" />
+	<loginlog ID="1" LOGINIP="127.0.0.1" ACCOUNTID="1" />
+</dataset>

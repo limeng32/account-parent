@@ -1,6 +1,7 @@
 package limeng32.mirage.account.service;
 
 import java.util.Collection;
+import java.util.Date;
 
 import limeng32.mirage.account.captcha.AccountCaptchaException;
 import limeng32.mirage.account.captcha.AccountCaptchaService;
@@ -9,6 +10,8 @@ import limeng32.mirage.account.email.AccountEmailException;
 import limeng32.mirage.account.email.AccountEmailService;
 import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
+import limeng32.mirage.account.persist.LoginLog;
+import limeng32.mirage.account.persist.LoginLogService;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountPersistService accountPersistService;
+
+	@Autowired
+	private LoginLogService loginLogService;
 
 	@Autowired
 	private AccountEmailService accountEmailService;
@@ -64,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public Account login(String email, String password)
+	public Account login(String email, String password, String remoteAddress)
 			throws AccountServiceException {
 		if (email == null || password == null) {
 			throw new AccountServiceException("Email or password is Null.");
@@ -77,7 +83,20 @@ public class AccountServiceImpl implements AccountService {
 		case 1:
 			Account account = accountC.toArray(new Account[1])[0];
 			if (account.getActivated()) {
-				return account;
+				accountPersistService.loadLoginLog(account, new LoginLog());
+				switch (account.getLoginLog().size()) {
+				case 1:
+					LoginLog[] logs = account.getLoginLog().toArray(
+							new LoginLog[account.getLoginLog().size()]);
+					logs[0].setLoginIP(remoteAddress);
+					logs[0].setLoginTime(new Date());
+					loginLogService.update(logs[0]);
+					return account;
+				default:
+					throw new AccountServiceException(
+							AccountServiceExceptionEnum.CannotFindLoginLog
+									.toString());
+				}
 			} else {
 				throw new AccountServiceException(
 						AccountServiceExceptionEnum.YourAccountNeedActivate
@@ -95,6 +114,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED)
 	public void signUpNew(Account account, String captchaValue, String remoteIP)
 			throws AccountServiceException {
 		String originPassword = account.getPassword();
@@ -112,7 +132,10 @@ public class AccountServiceImpl implements AccountService {
 				account.setName(account.getEmail().substring(0,
 						account.getEmail().indexOf("@")));
 			}
-			accountPersistService.insert(account);
+			insertAccountTransactive(account);
+			LoginLog log = new LoginLog();
+			log.setAccount(account);
+			insertLoginLogTransactive(log);
 			String link = accountServiceConfig.getActivateUrl().endsWith("/") ? accountServiceConfig
 					.getActivateUrl() + account.getEmail() + "/" + activationId
 					: accountServiceConfig.getActivateUrl() + "?k="
@@ -150,14 +173,16 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED)
-	public void transactiveInsert(Account account)
+	/**新增account时确保email是唯一的*/
+	public void insertAccountTransactive(Account account)
 			throws AccountServiceException {
 		accountPersistService.insert(account);
 		Account ac = new Account();
 		ac.setEmail(account.getEmail());
 		int c = accountPersistService.count(ac);
 		if (c > 1) {
-			throw new AccountServiceException("Repetition email.");
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.RepetitionEmail.toString());
 		}
 	}
 
@@ -234,6 +259,25 @@ public class AccountServiceImpl implements AccountService {
 			result = true;
 		}
 		return result;
+	}
+
+	@Override
+	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED)
+	/**新增loginlog时确保accountId是唯一的*/
+	public void insertLoginLogTransactive(LoginLog loginLog)
+			throws AccountServiceException {
+		if (loginLog.getAccount() == null) {
+			return;
+		}
+		loginLogService.insert(loginLog);
+		LoginLog logc = new LoginLog();
+		logc.setAccount(loginLog.getAccount());
+		int c = loginLogService.count(logc);
+		if (c != 1) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.FailedToInsertLoginLog
+							.toString());
+		}
 	}
 
 }

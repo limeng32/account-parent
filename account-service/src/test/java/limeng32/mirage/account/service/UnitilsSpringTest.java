@@ -80,15 +80,10 @@ public class UnitilsSpringTest {
 		a.setName("unknown");
 		a.setEmail("limeng32@live.cn");
 		try {
-			accountService.transactiveInsert(a);
+			accountService.insertAccountTransactive(a);
 		} catch (AccountServiceException e) {
-			switch (e.getMessage()) {
-			case "Repetition email.":
-				break;
-			default:
-				e.printStackTrace();
-				break;
-			}
+			Assert.assertEquals(e.getMessage(),
+					AccountServiceExceptionEnum.RepetitionEmail.toString());
 		}
 	}
 

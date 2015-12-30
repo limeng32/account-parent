@@ -79,7 +79,7 @@ public class AccountServiceTest {
 		// 3a. Try login but not activated
 		try {
 			Account a = accountService.login(account.getEmail(),
-					account.getPassword());
+					account.getPassword(), remoteIP);
 			Assert.assertNotNull(a);
 			Assert.assertFalse(a.getActivated());
 		} catch (AccountServiceException e) {
@@ -102,12 +102,12 @@ public class AccountServiceTest {
 
 		// 5. Login with correct id and password
 		Account a2 = accountService.login(account.getEmail(),
-				account.getPassword());
+				account.getPassword(), remoteIP);
 		Assert.assertTrue(a2.getActivated());
 
 		// 5a. Login with incorrect password
 		try {
-			accountService.login(account.getEmail(), "admin456");
+			accountService.login(account.getEmail(), "admin456", remoteIP);
 		} catch (AccountServiceException e) {
 			Assert.assertEquals(
 					AccountServiceExceptionEnum.EmailOrPasswordIsNotExist

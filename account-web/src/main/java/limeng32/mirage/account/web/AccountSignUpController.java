@@ -63,23 +63,6 @@ public class AccountSignUpController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/submit", params = "captchaValue")
-	public String signUpSubmit(
-			@RequestParam("captchaValue") String captchaValue,
-			HttpServletRequest request, HttpServletResponse response,
-			ModelMap mm, Account account) throws IOException {
-		boolean result = false;
-		try {
-			accountService.signUpNew(account, captchaValue,
-					request.getRemoteAddr());
-			result = true;
-		} catch (AccountServiceException e) {
-			response.sendError(400, e.getMessage());
-		}
-		mm.addAttribute("_content", result);
-		return UNIQUE_VIEW_NAME;
-	}
-
 	@RequestMapping(method = RequestMethod.POST, value = "/checkUnique", params = "email")
 	public String checkUnique(@RequestParam("email") String email,
 			HttpServletRequest request, HttpServletResponse response,
@@ -116,8 +99,7 @@ public class AccountSignUpController {
 			accountService.signUpNew(account, captchaValue,
 					request.getRemoteAddr());
 		} catch (AccountServiceException e) {
-			String errorName = "SignUpFail";
-			return "redirect:../signInError/" + errorName;
+			return "redirect:../signInError/" + e.getMessage();
 		}
 		return "redirect:../signUpSuccess";
 	}
