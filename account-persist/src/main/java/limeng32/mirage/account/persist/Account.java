@@ -2,6 +2,8 @@ package limeng32.mirage.account.persist;
 
 import java.io.Serializable;
 
+import limeng32.mirage.account.persist.face.Comment;
+import limeng32.mirage.account.persist.face.Story;
 import limeng32.mirage.util.pojo.PojoSupport;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.FieldMapperAnnotation;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.OpLockType;
@@ -46,6 +48,10 @@ public class Account extends PojoSupport<Account> implements Serializable {
 	private java.lang.String activateValue;
 
 	private java.util.Collection<LoginLog> loginLog;
+
+	private java.util.Collection<Comment> comment;
+
+	private java.util.Collection<Story> story;
 
 	public Integer getId() {
 		return id;
@@ -147,43 +153,108 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		}
 	}
 
-	@Override
-	public boolean equalsExactly(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Account other = (Account) obj;
-		if (activated != other.activated)
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (loginLog == null) {
-			if (other.loginLog != null)
-				return false;
-		} else if (!loginLog.equals(other.loginLog))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		return true;
+	public java.util.Collection<Comment> getComment() {
+		if (comment == null)
+			comment = new java.util.LinkedHashSet<Comment>();
+		return comment;
+	}
+
+	public java.util.Iterator<Comment> getIteratorComment() {
+		if (comment == null)
+			comment = new java.util.LinkedHashSet<Comment>();
+		return comment.iterator();
+	}
+
+	public void setComment(java.util.Collection<Comment> newComment) {
+		removeAllComment();
+		for (java.util.Iterator<Comment> iter = newComment.iterator(); iter
+				.hasNext();)
+			addComment((Comment) iter.next());
+	}
+
+	public void addComment(Comment newComment) {
+		if (newComment == null)
+			return;
+		if (this.comment == null)
+			this.comment = new java.util.LinkedHashSet<Comment>();
+		if (!this.comment.contains(newComment)) {
+			this.comment.add(newComment);
+			newComment.setAccount(this);
+		}
+	}
+
+	public void removeComment(Comment oldComment) {
+		if (oldComment == null)
+			return;
+		if (this.comment != null)
+			if (this.comment.contains(oldComment)) {
+				this.comment.remove(oldComment);
+				oldComment.setAccount((Account) null);
+			}
+	}
+
+	public void removeAllComment() {
+		if (comment != null) {
+			Comment oldComment;
+			for (java.util.Iterator<Comment> iter = getIteratorComment(); iter
+					.hasNext();) {
+				oldComment = (Comment) iter.next();
+				iter.remove();
+				oldComment.setAccount((Account) null);
+			}
+		}
+	}
+
+	public java.util.Collection<Story> getStory() {
+		if (story == null)
+			story = new java.util.LinkedHashSet<Story>();
+		return story;
+	}
+
+	public java.util.Iterator<Story> getIteratorStory() {
+		if (story == null)
+			story = new java.util.LinkedHashSet<Story>();
+		return story.iterator();
+	}
+
+	public void setStory(java.util.Collection<Story> newStory) {
+		removeAllStory();
+		for (java.util.Iterator<Story> iter = newStory.iterator(); iter
+				.hasNext();)
+			addStory((Story) iter.next());
+	}
+
+	public void addStory(Story newStory) {
+		if (newStory == null)
+			return;
+		if (this.story == null)
+			this.story = new java.util.LinkedHashSet<Story>();
+		if (!this.story.contains(newStory)) {
+			this.story.add(newStory);
+			newStory.setAccount(this);
+		}
+	}
+
+	public void removeStory(Story oldStory) {
+		if (oldStory == null)
+			return;
+		if (this.story != null)
+			if (this.story.contains(oldStory)) {
+				this.story.remove(oldStory);
+				oldStory.setAccount((Account) null);
+			}
+	}
+
+	public void removeAllStory() {
+		if (story != null) {
+			Story oldStory;
+			for (java.util.Iterator<Story> iter = getIteratorStory(); iter
+					.hasNext();) {
+				oldStory = (Story) iter.next();
+				iter.remove();
+				oldStory.setAccount((Account) null);
+			}
+		}
 	}
 
 }

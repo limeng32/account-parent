@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>limeng32.mirage</groupId>
 	<artifactId>account-parent</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Account Parent</name>
 	<properties>
 		<springframework.version>3.2.4.RELEASE</springframework.version>
 		<junit.version>4.7</junit.version>
-		<mirage-util.version>1.1.0</mirage-util.version>
+		<mirage-util.version>1.1.1</mirage-util.version>
 		<mybatisPlugin.version>1.1.0-SNAPSHOT</mybatisPlugin.version>
 		<dbcp.version>1.4</dbcp.version>
 		<mybatis-spring.version>1.2.2</mybatis-spring.version>
