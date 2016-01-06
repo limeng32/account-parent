@@ -2,8 +2,8 @@ package limeng32.mirage.account.persist;
 
 import java.io.Serializable;
 
-import limeng32.mirage.account.persist.face.Comment;
-import limeng32.mirage.account.persist.face.Story;
+import limeng32.mirage.account.persist.face.CommentFace;
+import limeng32.mirage.account.persist.face.StoryFace;
 import limeng32.mirage.util.pojo.PojoSupport;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.FieldMapperAnnotation;
 import limeng32.mybatis.mybatisPlugin.mapperPlugin.annotation.OpLockType;
@@ -49,9 +49,9 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	private java.util.Collection<LoginLog> loginLog;
 
-	private java.util.Collection<Comment> comment;
+	private java.util.Collection<CommentFace> comment;
 
-	private java.util.Collection<Story> story;
+	private java.util.Collection<StoryFace> story;
 
 	public Integer getId() {
 		return id;
@@ -153,37 +153,37 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		}
 	}
 
-	public java.util.Collection<Comment> getComment() {
+	public java.util.Collection<CommentFace> getComment() {
 		if (comment == null)
-			comment = new java.util.LinkedHashSet<Comment>();
+			comment = new java.util.LinkedHashSet<CommentFace>();
 		return comment;
 	}
 
-	public java.util.Iterator<Comment> getIteratorComment() {
+	public java.util.Iterator<CommentFace> getIteratorComment() {
 		if (comment == null)
-			comment = new java.util.LinkedHashSet<Comment>();
+			comment = new java.util.LinkedHashSet<CommentFace>();
 		return comment.iterator();
 	}
 
-	public void setComment(java.util.Collection<Comment> newComment) {
+	public void setComment(java.util.Collection<CommentFace> newComment) {
 		removeAllComment();
-		for (java.util.Iterator<Comment> iter = newComment.iterator(); iter
+		for (java.util.Iterator<CommentFace> iter = newComment.iterator(); iter
 				.hasNext();)
-			addComment((Comment) iter.next());
+			addComment((CommentFace) iter.next());
 	}
 
-	public void addComment(Comment newComment) {
+	public void addComment(CommentFace newComment) {
 		if (newComment == null)
 			return;
 		if (this.comment == null)
-			this.comment = new java.util.LinkedHashSet<Comment>();
+			this.comment = new java.util.LinkedHashSet<CommentFace>();
 		if (!this.comment.contains(newComment)) {
 			this.comment.add(newComment);
 			newComment.setAccount(this);
 		}
 	}
 
-	public void removeComment(Comment oldComment) {
+	public void removeComment(CommentFace oldComment) {
 		if (oldComment == null)
 			return;
 		if (this.comment != null)
@@ -195,47 +195,47 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	public void removeAllComment() {
 		if (comment != null) {
-			Comment oldComment;
-			for (java.util.Iterator<Comment> iter = getIteratorComment(); iter
+			CommentFace oldComment;
+			for (java.util.Iterator<CommentFace> iter = getIteratorComment(); iter
 					.hasNext();) {
-				oldComment = (Comment) iter.next();
+				oldComment = (CommentFace) iter.next();
 				iter.remove();
 				oldComment.setAccount((Account) null);
 			}
 		}
 	}
 
-	public java.util.Collection<Story> getStory() {
+	public java.util.Collection<StoryFace> getStory() {
 		if (story == null)
-			story = new java.util.LinkedHashSet<Story>();
+			story = new java.util.LinkedHashSet<StoryFace>();
 		return story;
 	}
 
-	public java.util.Iterator<Story> getIteratorStory() {
+	public java.util.Iterator<StoryFace> getIteratorStory() {
 		if (story == null)
-			story = new java.util.LinkedHashSet<Story>();
+			story = new java.util.LinkedHashSet<StoryFace>();
 		return story.iterator();
 	}
 
-	public void setStory(java.util.Collection<Story> newStory) {
+	public void setStory(java.util.Collection<StoryFace> newStory) {
 		removeAllStory();
-		for (java.util.Iterator<Story> iter = newStory.iterator(); iter
+		for (java.util.Iterator<StoryFace> iter = newStory.iterator(); iter
 				.hasNext();)
-			addStory((Story) iter.next());
+			addStory((StoryFace) iter.next());
 	}
 
-	public void addStory(Story newStory) {
+	public void addStory(StoryFace newStory) {
 		if (newStory == null)
 			return;
 		if (this.story == null)
-			this.story = new java.util.LinkedHashSet<Story>();
+			this.story = new java.util.LinkedHashSet<StoryFace>();
 		if (!this.story.contains(newStory)) {
 			this.story.add(newStory);
 			newStory.setAccount(this);
 		}
 	}
 
-	public void removeStory(Story oldStory) {
+	public void removeStory(StoryFace oldStory) {
 		if (oldStory == null)
 			return;
 		if (this.story != null)
@@ -247,10 +247,10 @@ public class Account extends PojoSupport<Account> implements Serializable {
 
 	public void removeAllStory() {
 		if (story != null) {
-			Story oldStory;
-			for (java.util.Iterator<Story> iter = getIteratorStory(); iter
+			StoryFace oldStory;
+			for (java.util.Iterator<StoryFace> iter = getIteratorStory(); iter
 					.hasNext();) {
-				oldStory = (Story) iter.next();
+				oldStory = (StoryFace) iter.next();
 				iter.remove();
 				oldStory.setAccount((Account) null);
 			}
