@@ -36,7 +36,7 @@
 
 		<plugin interceptor="limeng32.mybatis.mybatisPlugin.cachePlugin.EnhancedCachingExecutor">
 			<property name="cacheEnabled" value="true" />
-			<property name="annotationPackage" value="limeng32.mirage.account.persist" />
+			<property name="annotationPackage" value="limeng32.mirage.mapper" />
 		</plugin>
 	</plugins>
 </configuration>

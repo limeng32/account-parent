@@ -2,7 +2,7 @@ package limeng32.mirage.account.persist;
 
 import java.util.Collection;
 
-import limeng32.mirage.account.persist.mapper.AccountMapper;
+import limeng32.mirage.mapper.AccountMapper;
 import limeng32.mirage.util.service.ServiceSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;

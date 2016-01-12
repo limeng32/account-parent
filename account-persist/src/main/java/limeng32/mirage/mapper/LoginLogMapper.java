@@ -1,4 +1,4 @@
-package limeng32.mirage.account.persist.mapper;
+package limeng32.mirage.mapper;
 
 import java.util.Collection;
 
