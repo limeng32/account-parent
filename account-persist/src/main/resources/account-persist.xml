@@ -28,7 +28,7 @@
 		<property name="configLocation" value="classpath:Configuration.xml" />
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations"
-			value="classpath:limeng32/mirage/mapper/*.xml" />
+			value="classpath*:limeng32/mirage/mapper/*.xml" />
 		<property name="typeAliasesPackage" value="limeng32.mirage" />
 	</bean>
 
