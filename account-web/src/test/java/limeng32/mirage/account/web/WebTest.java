@@ -23,9 +23,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:account-email.xml",
-		"classpath:account-persist.xml", "classpath:account-captcha.xml",
-		"classpath:account-service.xml" })
+@ContextConfiguration({ "classpath:account-service.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		DbUnitTestExecutionListener.class })

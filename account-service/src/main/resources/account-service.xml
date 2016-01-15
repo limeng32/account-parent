@@ -26,4 +26,7 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	<tx:annotation-driven transaction-manager="txManager" />
+	<import resource="classpath:account-captcha.xml" />
+	<import resource="classpath:account-email.xml" />
+	<import resource="classpath:account-persist.xml" />
 </beans>
