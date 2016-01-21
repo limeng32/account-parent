@@ -100,5 +100,9 @@
 			<groupId>org.unitils</groupId>
 			<artifactId>unitils-easymock</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
 	</dependencies>
 </project>

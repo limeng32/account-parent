@@ -50,7 +50,7 @@ public class LoginLog extends PojoSupport<LoginLog> implements Serializable {
 	}
 
 	public void setAccount(Account newAccount) {
-		if (this.account == null || !this.account.equals(newAccount)) {
+		if (this.account == null || this.account != newAccount) {
 			if (this.account != null) {
 				Account oldAccount = this.account;
 				this.account = null;

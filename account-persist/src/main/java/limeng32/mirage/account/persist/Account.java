@@ -31,6 +31,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 	private java.lang.String password;
 
 	@FieldMapperAnnotation(dbFieldName = "opLock", jdbcType = JdbcType.INTEGER, opLockType = OpLockType.Version)
+	@JSONField(serialize = false)
 	private Integer opLock;
 
 	/**
@@ -107,6 +108,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		return loginLog;
 	}
 
+	@JSONField(serialize = false)
 	public java.util.Iterator<LoginLog> getIteratorLoginLog() {
 		if (loginLog == null)
 			loginLog = new java.util.LinkedHashSet<LoginLog>();
@@ -128,6 +130,13 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		if (!this.loginLog.contains(newLoginLog)) {
 			this.loginLog.add(newLoginLog);
 			newLoginLog.setAccount(this);
+		} else {
+			LoginLog temp = newLoginLog.summon(this.loginLog);
+			if (temp != newLoginLog) {
+				removeLoginLog(temp);
+				this.loginLog.add(newLoginLog);
+				newLoginLog.setAccount(this);
+			}
 		}
 	}
 
@@ -136,8 +145,11 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.loginLog != null)
 			if (this.loginLog.contains(oldLoginLog)) {
-				this.loginLog.remove(oldLoginLog);
-				oldLoginLog.setAccount((Account) null);
+				LoginLog temp = oldLoginLog.summon(this.loginLog);
+				if (temp == oldLoginLog) {
+					this.loginLog.remove(oldLoginLog);
+					oldLoginLog.setAccount((Account) null);
+				}
 			}
 	}
 
@@ -153,22 +165,24 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		}
 	}
 
-	public java.util.Collection<CommentFace> getComment() {
+	public java.util.Collection<? extends CommentFace> getComment() {
 		if (comment == null)
 			comment = new java.util.LinkedHashSet<CommentFace>();
 		return comment;
 	}
 
-	public java.util.Iterator<CommentFace> getIteratorComment() {
+	@JSONField(serialize = false)
+	public java.util.Iterator<? extends CommentFace> getIteratorComment() {
 		if (comment == null)
 			comment = new java.util.LinkedHashSet<CommentFace>();
 		return comment.iterator();
 	}
 
-	public void setComment(java.util.Collection<CommentFace> newComment) {
+	public void setComment(
+			java.util.Collection<? extends CommentFace> newComment) {
 		removeAllComment();
-		for (java.util.Iterator<CommentFace> iter = newComment.iterator(); iter
-				.hasNext();)
+		for (java.util.Iterator<? extends CommentFace> iter = newComment
+				.iterator(); iter.hasNext();)
 			addComment((CommentFace) iter.next());
 	}
 
@@ -180,6 +194,14 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		if (!this.comment.contains(newComment)) {
 			this.comment.add(newComment);
 			newComment.setAccount(this);
+		} else {
+			CommentFace<?> temp = (CommentFace<?>) newComment
+					.summon(this.comment);
+			if (temp != newComment) {
+				removeComment(temp);
+				this.comment.add(newComment);
+				newComment.setAccount(this);
+			}
 		}
 	}
 
@@ -188,15 +210,19 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.comment != null)
 			if (this.comment.contains(oldComment)) {
-				this.comment.remove(oldComment);
-				oldComment.setAccount((Account) null);
+				CommentFace<?> temp = (CommentFace<?>) oldComment
+						.summon(this.comment);
+				if (temp == oldComment) {
+					this.comment.remove(oldComment);
+					oldComment.setAccount((Account) null);
+				}
 			}
 	}
 
 	public void removeAllComment() {
 		if (comment != null) {
 			CommentFace oldComment;
-			for (java.util.Iterator<CommentFace> iter = getIteratorComment(); iter
+			for (java.util.Iterator<? extends CommentFace> iter = getIteratorComment(); iter
 					.hasNext();) {
 				oldComment = (CommentFace) iter.next();
 				iter.remove();
@@ -211,6 +237,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		return story;
 	}
 
+	@JSONField(serialize = false)
 	public java.util.Iterator<StoryFace> getIteratorStory() {
 		if (story == null)
 			story = new java.util.LinkedHashSet<StoryFace>();

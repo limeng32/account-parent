@@ -1,6 +1,7 @@
 package limeng32.mirage.account.persist;
 
 import java.util.Collection;
+import java.util.Date;
 
 import limeng32.mybatis.mybatisPlugin.util.ReflectHelper;
 
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
+import com.alibaba.fastjson.JSON;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -180,19 +182,6 @@ public class DaoTest {
 		_log.setLoginIP("127.0.0.1");
 		_log.setAccount(_ac);
 		loginLogService.insert(_log);
-		// Account account = accountPersistService.select(1);
-		// accountPersistService.loadLoginLog(account, new LoginLog());
-		// LoginLog[] logs = account.getLoginLog().toArray(
-		// new LoginLog[account.getLoginLog().size()]);
-		// Assert.assertEquals(1, logs.length);
-		// Assert.assertEquals("127.0.0.1", logs[0].getLoginIP());
-		// logs[0].setLoginIP("127.0.0.2");
-		// loginLogService.update(logs[0]);
-		// accountPersistService.loadLoginLog(account, new LoginLog());
-		// LoginLog[] logs2 = account.getLoginLog().toArray(
-		// new LoginLog[account.getLoginLog().size()]);
-		// Assert.assertEquals(1, logs2.length);
-		// Assert.assertEquals("127.0.0.2", logs2[0].getLoginIP());
 		LoginLog log = loginLogService.select(1);
 		Assert.assertEquals("john", log.getAccount().getName());
 		Account account = accountPersistService.select(1);
@@ -200,5 +189,56 @@ public class DaoTest {
 		accountPersistService.update(account);
 		log = loginLogService.select(1);
 		Assert.assertEquals("mary", log.getAccount().getName());
+	}
+
+	@Test
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.serializeAccount.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.serializeAccount.xml")
+	public void serializeAccount() {
+		Account a = new Account();
+		try {
+			ReflectHelper.setValueByFieldName(a, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		a.setName("john");
+		accountPersistService.insert(a);
+		LoginLog l = new LoginLog();
+		try {
+			ReflectHelper.setValueByFieldName(l, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		l.setLoginIP("127.0.0.1");
+		l.setAccount(a);
+		l.setLoginTime(new Date());
+		loginLogService.insert(l);
+		a.setEmail("_email");
+		accountPersistService.update(a);
+		l.setLoginTime(null);
+		Account a2 = accountPersistService.select(2);
+		accountPersistService.loadLoginLog(a2, new LoginLog());
+		a2.getLoginLog().toArray(new LoginLog[a.getLoginLog().size()])[0]
+				.setLoginTime(null);
+		String jsonA = JSON.toJSONString(a);
+		String jsonA2 = JSON.toJSONString(a2);
+		Assert.assertEquals(jsonA, jsonA2);
+		LoginLog newLog = new LoginLog();
+		try {
+			ReflectHelper.setValueByFieldName(newLog, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		newLog.setLoginIP("123");
+		a2.addLoginLog(newLog);
+		String jsonA2o = JSON.toJSONString(a2);
+		Assert.assertFalse(jsonA2.equals(jsonA2o));
+		Assert.assertTrue(a == a.getLoginLog().toArray(
+				new LoginLog[a.getLoginLog().size()])[0].getAccount());
+		Assert.assertTrue(a2.equals(a2.getLoginLog().toArray(
+				new LoginLog[a2.getLoginLog().size()])[0].getAccount()));
 	}
 }
