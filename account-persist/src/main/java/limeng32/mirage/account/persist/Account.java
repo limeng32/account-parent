@@ -131,7 +131,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			this.loginLog.add(newLoginLog);
 			newLoginLog.setAccount(this);
 		} else {
-			LoginLog temp = newLoginLog.summon(this.loginLog);
+			LoginLog temp = newLoginLog.extract(this.loginLog);
 			if (temp != newLoginLog) {
 				removeLoginLog(temp);
 				this.loginLog.add(newLoginLog);
@@ -145,7 +145,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.loginLog != null)
 			if (this.loginLog.contains(oldLoginLog)) {
-				LoginLog temp = oldLoginLog.summon(this.loginLog);
+				LoginLog temp = oldLoginLog.extract(this.loginLog);
 				if (temp == oldLoginLog) {
 					this.loginLog.remove(oldLoginLog);
 					oldLoginLog.setAccount((Account) null);
@@ -196,7 +196,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			newComment.setAccount(this);
 		} else {
 			CommentFace<?> temp = (CommentFace<?>) newComment
-					.summon(this.comment);
+					.extract(this.comment);
 			if (temp != newComment) {
 				removeComment(temp);
 				this.comment.add(newComment);
@@ -211,7 +211,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		if (this.comment != null)
 			if (this.comment.contains(oldComment)) {
 				CommentFace<?> temp = (CommentFace<?>) oldComment
-						.summon(this.comment);
+						.extract(this.comment);
 				if (temp == oldComment) {
 					this.comment.remove(oldComment);
 					oldComment.setAccount((Account) null);
