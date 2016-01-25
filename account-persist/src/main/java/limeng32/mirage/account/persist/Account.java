@@ -131,11 +131,15 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			this.loginLog.add(newLoginLog);
 			newLoginLog.setAccount(this);
 		} else {
-			LoginLog temp = newLoginLog.extract(this.loginLog);
-			if (temp != newLoginLog) {
-				removeLoginLog(temp);
-				this.loginLog.add(newLoginLog);
-				newLoginLog.setAccount(this);
+			for (LoginLog temp : this.loginLog) {
+				if (newLoginLog.equals(temp)) {
+					if (temp != newLoginLog) {
+						removeLoginLog(temp);
+						this.loginLog.add(newLoginLog);
+						newLoginLog.setAccount(this);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -145,11 +149,16 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.loginLog != null)
 			if (this.loginLog.contains(oldLoginLog)) {
-				LoginLog temp = oldLoginLog.extract(this.loginLog);
-				if (temp == oldLoginLog) {
-					this.loginLog.remove(oldLoginLog);
-					oldLoginLog.setAccount((Account) null);
+				for (LoginLog temp : this.loginLog) {
+					if (oldLoginLog.equals(temp)) {
+						if (temp != oldLoginLog) {
+							temp.setAccount((Account) null);
+						}
+						break;
+					}
 				}
+				this.loginLog.remove(oldLoginLog);
+				oldLoginLog.setAccount((Account) null);
 			}
 	}
 
@@ -195,12 +204,15 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			this.comment.add(newComment);
 			newComment.setAccount(this);
 		} else {
-			CommentFace<?> temp = (CommentFace<?>) newComment
-					.extract(this.comment);
-			if (temp != newComment) {
-				removeComment(temp);
-				this.comment.add(newComment);
-				newComment.setAccount(this);
+			for (CommentFace temp : this.comment) {
+				if (newComment.equals(temp)) {
+					if (temp != newComment) {
+						removeComment(temp);
+						this.comment.add(newComment);
+						newComment.setAccount(this);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -210,12 +222,16 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.comment != null)
 			if (this.comment.contains(oldComment)) {
-				CommentFace<?> temp = (CommentFace<?>) oldComment
-						.extract(this.comment);
-				if (temp == oldComment) {
-					this.comment.remove(oldComment);
-					oldComment.setAccount((Account) null);
+				for (CommentFace temp : this.comment) {
+					if (oldComment.equals(temp)) {
+						if (temp != oldComment) {
+							temp.setAccount((Account) null);
+						}
+						break;
+					}
 				}
+				this.comment.remove(oldComment);
+				oldComment.setAccount((Account) null);
 			}
 	}
 
@@ -259,6 +275,17 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		if (!this.story.contains(newStory)) {
 			this.story.add(newStory);
 			newStory.setAccount(this);
+		} else {
+			for (StoryFace temp : this.story) {
+				if (newStory.equals(temp)) {
+					if (temp != newStory) {
+						removeStory(temp);
+						this.story.add(newStory);
+						newStory.setAccount(this);
+					}
+					break;
+				}
+			}
 		}
 	}
 
@@ -267,6 +294,14 @@ public class Account extends PojoSupport<Account> implements Serializable {
 			return;
 		if (this.story != null)
 			if (this.story.contains(oldStory)) {
+				for (StoryFace temp : this.story) {
+					if (oldStory.equals(temp)) {
+						if (temp != oldStory) {
+							temp.setAccount((Account) null);
+						}
+						break;
+					}
+				}
 				this.story.remove(oldStory);
 				oldStory.setAccount((Account) null);
 			}

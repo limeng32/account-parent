@@ -241,4 +241,46 @@ public class DaoTest {
 		Assert.assertTrue(a2.equals(a2.getLoginLog().toArray(
 				new LoginLog[a2.getLoginLog().size()])[0].getAccount()));
 	}
+
+	@Test
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testRemoveLoginLog.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testRemoveLoginLog.xml")
+	public void testRemoveLoginLog() {
+		Account a = new Account();
+		try {
+			ReflectHelper.setValueByFieldName(a, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		a.setName("john");
+		accountPersistService.insert(a);
+		LoginLog l = new LoginLog(), l2 = new LoginLog(), l3 = new LoginLog();
+		try {
+			ReflectHelper.setValueByFieldName(l, "id", 2);
+			ReflectHelper.setValueByFieldName(l2, "id", 3);
+			ReflectHelper.setValueByFieldName(l3, "id", 3);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		l.setLoginIP("127.0.0.2");
+		l.setAccount(a);
+		loginLogService.insert(l);
+		l2.setLoginIP("127.0.0.3");
+		l2.setAccount(a);
+		loginLogService.insert(l2);
+		a.setEmail("_email");
+		accountPersistService.update(a);
+		Account a2 = accountPersistService.select(2);
+		accountPersistService.loadLoginLog(a2, new LoginLog());
+		Assert.assertEquals(2, a2.getLoginLog().size());
+		LoginLog l4 = a2.getLoginLog().toArray(
+				new LoginLog[a2.getLoginLog().size()])[1];
+		String json1 = JSON.toJSONString(l4);
+		a2.removeLoginLog(l3);
+		Assert.assertEquals(1, a2.getLoginLog().size());
+		String json2 = JSON.toJSONString(l4);
+		Assert.assertFalse(json1.equals(json2));
+	}
 }

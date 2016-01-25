@@ -1,9 +1,8 @@
 package limeng32.mirage.account.persist.face;
 
 import limeng32.mirage.account.persist.Account;
-import limeng32.mirage.util.pojo.PojoFace;
 
-public interface CommentFace<T> extends PojoFace<T>{
+public interface CommentFace {
 
 	void setAccount(Account account);
 
