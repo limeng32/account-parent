@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,6 +39,7 @@ public class UnitilsSpringTest {
 	private AccountService accountService;
 
 	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.result.xml")
 	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testSelf.xml")
@@ -60,6 +62,7 @@ public class UnitilsSpringTest {
 	}
 
 	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.result.xml")
 	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction.xml")
@@ -86,6 +89,7 @@ public class UnitilsSpringTest {
 	}
 
 	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction2.xml")
 	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/UnitilsSpringTest.testTransaction2.xml")
 	public void testTransaction2() throws SecurityException,
