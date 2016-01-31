@@ -25,7 +25,7 @@ import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:account-service.xml" })
+@ContextConfiguration({ "classpath:account-service-test.xml" })
 public class AccountServiceTest {
 	private GreenMail greenMail;
 

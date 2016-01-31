@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:account-persist.xml")
+@ContextConfiguration("classpath:account-persist-test.xml")
 public class AccountPersistServiceTest {
 
 	@Autowired

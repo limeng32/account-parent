@@ -10,6 +10,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath:account-service.xml
+			classpath:account-web.xml
 		</param-value>
 	</context-param>
 	<listener>
