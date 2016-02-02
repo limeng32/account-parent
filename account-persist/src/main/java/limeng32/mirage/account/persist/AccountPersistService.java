@@ -65,6 +65,7 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 
 	@Override
 	public void loadLoginLog(Account account, LoginLog loginLog) {
+		account.removeAllLoginLog();
 		loginLog.setAccount(account);
 		account.setLoginLog(loginLogService.selectAll(loginLog));
 	}

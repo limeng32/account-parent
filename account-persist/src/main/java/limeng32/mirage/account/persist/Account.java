@@ -171,6 +171,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 				iter.remove();
 				oldLoginLog.setAccount((Account) null);
 			}
+			loginLog.clear();
 		}
 	}
 
@@ -244,6 +245,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 				iter.remove();
 				oldComment.setAccount((Account) null);
 			}
+			comment.clear();
 		}
 	}
 
@@ -316,6 +318,7 @@ public class Account extends PojoSupport<Account> implements Serializable {
 				iter.remove();
 				oldStory.setAccount((Account) null);
 			}
+			story.clear();
 		}
 	}
 
