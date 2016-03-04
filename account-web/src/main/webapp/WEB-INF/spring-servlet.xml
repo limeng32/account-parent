@@ -18,7 +18,7 @@
 			expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 
-	<bean id="rpe" class="limeng32.mirage.account.web.ResourcePathExposer"
+	<bean id="rpe" class="limeng32.mirage.web.ResourcePathExposer"
 		init-method="init" />
 
 	<mvc:resources mapping="#{rpe.resourceRoot}/**" location="/"

@@ -1,4 +1,4 @@
-package limeng32.mirage.account.web;
+package limeng32.mirage.web;
 
 import javax.servlet.ServletContext;
 
