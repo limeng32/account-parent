@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AccountSignInController {
 
+	private static final String relativePath = "account/";
+
 	@Autowired
 	AccountService accountService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/signIn")
 	public String get() {
-		return "signIn";
+		return relativePath + "signIn";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/signIn/checkExist", params = "email")

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AccountController {
 
+	private static final String relativePath = "account/";
+
 	@Autowired
 	AccountService accountService;
 
@@ -26,7 +28,7 @@ public class AccountController {
 		if (request.getSession().getAttribute("accountToken") != null) {
 			request.setAttribute("authToken", 5);
 		}
-		return "index";
+		return relativePath + "index";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/signOut")
@@ -40,7 +42,7 @@ public class AccountController {
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signInError")
 	public String signInError(HttpServletRequest request) {
-		return "signInError";
+		return relativePath + "signInError";
 	}
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signInError/{errorName}")
@@ -55,12 +57,12 @@ public class AccountController {
 			reason = "未知异常";
 		}
 		request.setAttribute("reason", reason);
-		return "signInError";
+		return relativePath + "signInError";
 	}
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signUpSuccess")
 	public String signUpSuccess(HttpServletRequest request) {
-		return "signUpSuccess";
+		return relativePath + "signUpSuccess";
 	}
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/signUpSuccess/{successName}")
@@ -68,7 +70,7 @@ public class AccountController {
 			@PathVariable String successName) {
 		request.setAttribute("reason", AccountWebEnum.valueOf(successName)
 				.description());
-		return "signUpSuccess";
+		return relativePath + "signUpSuccess";
 	}
 
 }

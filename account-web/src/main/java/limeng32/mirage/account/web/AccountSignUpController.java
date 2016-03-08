@@ -24,6 +24,8 @@ public class AccountSignUpController {
 
 	public static final String UNIQUE_VIEW_NAME = "__unique_view_name";
 
+	private static final String relativePath = "account/";
+
 	@Autowired
 	AccountPersistService accountPersistService;
 
@@ -32,7 +34,7 @@ public class AccountSignUpController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String get() {
-		return "signUp";
+		return relativePath + "signUp";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/captcha")
