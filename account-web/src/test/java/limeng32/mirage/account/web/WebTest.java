@@ -36,6 +36,11 @@ public class WebTest {
 	private AccountPersistService accountPersistService;
 
 	@Test
+	public void helloWorld() {
+
+	}
+
+	// @Test
 	@IfProfileValue(name = "VOLATILE", value = "true")
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/web/WebTest.testTrue.xml")
 	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/web/WebTest.testTrue.result.xml")
