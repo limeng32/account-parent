@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
 import limeng32.mirage.account.service.AccountServiceExceptionEnum;
 
@@ -22,6 +24,9 @@ public class AccountController {
 
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+	AccountPersistService accountPersistService;
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
 	public String get(HttpServletRequest request) {
@@ -73,4 +78,12 @@ public class AccountController {
 		return relativePath + "signUpSuccess";
 	}
 
+	@RequestMapping(method = { RequestMethod.POST }, value = "/getAccount")
+	public String getAccount(HttpServletRequest request,
+			HttpServletResponse response, ModelMap mm, int id)
+			throws IOException {
+		Account result = accountPersistService.select(id);
+		mm.addAttribute("_content", result);
+		return AccountSignUpController.UNIQUE_VIEW_NAME;
+	}
 }
