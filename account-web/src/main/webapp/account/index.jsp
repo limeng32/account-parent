@@ -23,7 +23,6 @@
 
 <script>
 var token = '${accountToken }';
-var auth = '${authToken}';
 KISSY.use('account-front/index');
 </script>
 </body>

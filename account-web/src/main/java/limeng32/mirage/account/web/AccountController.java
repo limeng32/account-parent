@@ -30,9 +30,6 @@ public class AccountController {
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
 	public String get(HttpServletRequest request) {
-		if (request.getSession().getAttribute("accountToken") != null) {
-			request.setAttribute("authToken", 5);
-		}
 		return relativePath + "index";
 	}
 
@@ -40,7 +37,6 @@ public class AccountController {
 	public String checkExist(HttpServletRequest request,
 			HttpServletResponse response, ModelMap mm) throws IOException {
 		request.getSession().removeAttribute("accountToken");
-		request.getSession().removeAttribute("authToken");
 		mm.addAttribute("_content", true);
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
