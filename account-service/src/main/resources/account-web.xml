@@ -17,7 +17,7 @@
 		destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}">
 		</property>
-		<property name="url" value="${jdbc.url}"></property>
+		<property name="url" value="${jdbc.url}?${jdbc.para1}&amp;${jdbc.para2}"></property>
 		<property name="username" value="${jdbc.username}"></property>
 		<property name="password" value="${jdbc.password}"></property>
 	</bean>

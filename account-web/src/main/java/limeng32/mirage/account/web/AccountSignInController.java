@@ -68,6 +68,6 @@ public class AccountSignInController {
 		}
 		account.setPassword(null);
 		request.getSession().setAttribute("accountToken", account.getId());
-		return "redirect:../";
+		return "redirect:../home";
 	}
 }
