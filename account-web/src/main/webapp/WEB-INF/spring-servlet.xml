@@ -25,11 +25,15 @@
 		cache-period="3153600" />
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven />
-	
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/" p:suffix=".jsp">
 	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="UTF-8" p:maxUploadSize="5000000" p:uploadTempDir="/" />
 
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">

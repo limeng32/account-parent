@@ -20,7 +20,15 @@
 		<property name="activateEmailSubject" value="${account.activateEmailSubject}" />
 		<property name="activateEmailBody" value="${account.activateEmailBody}" />
 	</bean>
-
+	<bean class="limeng32.mirage.account.service.AliyunForAccount"
+		init-method="initOSS">
+		<property name="accessKeyId" value="${aliyun.accessKey.id}" />
+		<property name="accessKeySecret" value="${aliyun.accessKey.secret}" />
+		<property name="ossBucket" value="${aliyun.oss.bucket}" />
+		<property name="ossEndpoint" value="${aliyun.oss.endpoint}" />
+		<property name="ossFilepath" value="${aliyun.oss.filepath}" />
+		<property name="ossPortraitlayout" value="${aliyun.oss.portraitlayout}" />
+	</bean>
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>

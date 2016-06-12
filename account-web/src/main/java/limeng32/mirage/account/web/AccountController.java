@@ -9,6 +9,9 @@ import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
 import limeng32.mirage.account.service.AccountServiceExceptionEnum;
+import limeng32.mirage.account.service.AliyunForAccount;
+import limeng32.mirage.util.upload.UploadNamingPolicy;
+import limeng32.mirage.util.upload.UploadedFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class AccountController {
@@ -27,6 +32,9 @@ public class AccountController {
 
 	@Autowired
 	AccountPersistService accountPersistService;
+
+	@Autowired
+	AliyunForAccount aliyun;
 
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/")
 	public String get(HttpServletRequest request) {
@@ -79,6 +87,33 @@ public class AccountController {
 			HttpServletResponse response, ModelMap mm, int id)
 			throws IOException {
 		Account result = accountPersistService.select(id);
+		mm.addAttribute("_content", result);
+		return AccountSignUpController.UNIQUE_VIEW_NAME;
+	}
+
+	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/editUser")
+	public String editUser(HttpServletRequest request) {
+		return relativePath + "editUser";
+	}
+
+	@RequestMapping(method = { RequestMethod.POST }, value = "/uploadPortrait")
+	public String uploadFile(HttpServletRequest request,
+			@RequestParam("Filedata") MultipartFile file,
+			HttpServletResponse response, ModelMap mm) throws IOException {
+		UploadedFile result = new UploadedFile();
+		if (!file.isEmpty()) {
+			String fileName = aliyun.buildPortraitFileName(UploadNamingPolicy
+					.dateWithUUIDName(file.getOriginalFilename()));
+			AliyunForAccount.getOSSClient().putObject(aliyun.getOssBucket(),
+					fileName, file.getInputStream());
+			result.setStatus(1);
+			result.setType("ajax");
+			result.setName(file.getOriginalFilename());
+			result.setUrl(aliyun.ossUrl(fileName));
+		} else {
+			result.setStatus(0);
+			result.setMessage("上传失败！");
+		}
 		mm.addAttribute("_content", result);
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
