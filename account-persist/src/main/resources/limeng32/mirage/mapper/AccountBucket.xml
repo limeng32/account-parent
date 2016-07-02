@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="limeng32.mirage.mapper.AccountMapper">
+<mapper namespace="limeng32.mirage.mapper.AccountBucketMapper">
 	<cache />
 
 	<select id="select" resultMap="result">#{id}</select>
@@ -17,7 +17,9 @@
 
 	<delete id="delete" />
 
-	<resultMap id="result" type="Account" autoMapping="true">
+	<resultMap id="result" type="AccountBucket" autoMapping="true">
 		<id property="id" column="id" />
+		<association property="account" javaType="Account"
+			select="limeng32.mirage.mapper.AccountMapper.select" column="accountId" />
 	</resultMap>
 </mapper>

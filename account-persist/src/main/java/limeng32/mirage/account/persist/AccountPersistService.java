@@ -18,6 +18,9 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 	@Autowired
 	private LoginLogService loginLogService;
 
+	@Autowired
+	private AccountBucketService accountBucketService;
+
 	@Override
 	public Account select(int id) {
 		return supportSelect(mapper, id);
@@ -68,5 +71,12 @@ public class AccountPersistService extends ServiceSupport<Account> implements
 		account.removeAllLoginLog();
 		loginLog.setAccount(account);
 		account.setLoginLog(loginLogService.selectAll(loginLog));
+	}
+
+	@Override
+	public void loadAccountBucket(Account account, AccountBucket accountBucket) {
+		account.removeAllAccountBucket();
+		accountBucket.setAccount(account);
+		account.setAccountBucket(accountBucketService.selectAll(accountBucket));
 	}
 }

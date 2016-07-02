@@ -3,6 +3,7 @@ package limeng32.mirage.mapper;
 import java.util.Collection;
 
 import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.AccountBucket;
 import limeng32.mirage.account.persist.LoginLog;
 import limeng32.mirage.util.mapper.MapperFace;
 import limeng32.mybatis.mybatisPlugin.cachePlugin.annotation.CacheAnnotation;
@@ -44,4 +45,6 @@ public interface AccountMapper extends MapperFace<Account> {
 	public int count(Account t);
 
 	public void loadLoginLog(Account account, LoginLog loginLog);
+
+	public void loadAccountBucket(Account account, AccountBucket accountBucket);
 }

@@ -40,6 +40,9 @@ public class DaoTest {
 	@Autowired
 	private LoginLogService loginLogService;
 
+	@Autowired
+	private AccountBucketService accountBucketService;
+
 	@Test
 	@IfProfileValue(name = "VOLATILE", value = "true")
 	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.updateAccount.xml")
@@ -290,5 +293,75 @@ public class DaoTest {
 		Assert.assertEquals(1, a2.getLoginLog().size());
 		String json2 = JSON.toJSONString(l4);
 		Assert.assertFalse(json1.equals(json2));
+	}
+
+	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testInsertAccountBucket.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/persist/DaoTest.testInsertAccountBucket.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testInsertAccountBucket.xml")
+	public void testInsertAccountBucket() {
+		Account a = new Account();
+		AccountBucket ab = new AccountBucket();
+		try {
+			ReflectHelper.setValueByFieldName(a, "id", 1);
+			ReflectHelper.setValueByFieldName(ab, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		accountPersistService.insert(a);
+		ab.setAccount(a);
+		ab.setPortrait("a.b.c");
+		accountBucketService.insert(ab);
+	}
+
+	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testUpdateAccountBucket.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/persist/DaoTest.testUpdateAccountBucket.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.testUpdateAccountBucket.xml")
+	public void testUpdateAccountBucket() {
+		Account a = new Account();
+		AccountBucket ab = new AccountBucket();
+		try {
+			ReflectHelper.setValueByFieldName(a, "id", 1);
+			ReflectHelper.setValueByFieldName(ab, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		accountPersistService.insert(a);
+		ab.setAccount(a);
+		ab.setPortrait("a.b.c");
+		accountBucketService.insert(ab);
+		AccountBucket ab2 = accountBucketService.select(2);
+		ab2.setPortrait("c.b.a");
+		accountBucketService.update(ab2);
+	}
+
+	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.loadAccountBucket.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/persist/DaoTest.loadAccountBucket.xml")
+	public void loadAccountBucket() {
+		Account a = new Account();
+		AccountBucket ab = new AccountBucket();
+		try {
+			ReflectHelper.setValueByFieldName(a, "id", 1);
+			ReflectHelper.setValueByFieldName(ab, "id", 2);
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		accountPersistService.insert(a);
+		ab.setAccount(a);
+		ab.setPortrait("a.b.c");
+		accountBucketService.insert(ab);
+		Account account = accountPersistService.select(1);
+		accountPersistService.loadAccountBucket(account, new AccountBucket());
+		AccountBucket[] abA = account.getAccountBucket().toArray(
+				new AccountBucket[account.getAccountBucket().size()]);
+		Assert.assertEquals(new Integer(1), abA[0].getAccount().getId());
 	}
 }
