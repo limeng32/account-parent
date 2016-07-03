@@ -9,13 +9,17 @@ import limeng32.mirage.account.captcha.RandomGenerator;
 import limeng32.mirage.account.email.AccountEmailException;
 import limeng32.mirage.account.email.AccountEmailService;
 import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.AccountBucket;
+import limeng32.mirage.account.persist.AccountBucketService;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.persist.LoginLog;
 import limeng32.mirage.account.persist.LoginLogService;
+import limeng32.mybatis.mybatisPlugin.util.ReflectHelper;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +40,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountServiceConfig accountServiceConfig;
+
+	@Autowired
+	private AccountBucketService accountBucketService;
 
 	@Override
 	public void activate(String activationKey, String activationValue)
@@ -280,4 +287,74 @@ public class AccountServiceImpl implements AccountService {
 		}
 	}
 
+	@Override
+	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public void updateAccountBucketTransactive(int accountBucketId,
+			AccountBucket accountBucket) throws AccountServiceException {
+		if (accountBucket == null || accountBucketId <= 0) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.CannotFindAccountBucket
+							.toString());
+		}
+		if (accountBucket.getAccount() == null
+				|| accountPersistService.select(accountBucket.getAccount()
+						.getId()) == null) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.CannotFindAccount.toString());
+		}
+		Integer temp = accountBucket.getId();
+		try {
+			ReflectHelper.setValueByFieldName(accountBucket, "id",
+					accountBucketId);
+			if (accountBucketService.update(accountBucket) != 1) {
+				throw new AccountServiceException(
+						AccountServiceExceptionEnum.ConnotUpdateAccountBucket
+								.toString());
+			}
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			throw new AccountServiceException(e.getMessage());
+		} finally {
+			try {
+				ReflectHelper.setValueByFieldName(accountBucket, "id", temp);
+			} catch (SecurityException | NoSuchFieldException
+					| IllegalArgumentException | IllegalAccessException e1) {
+				throw new AccountServiceException(e1.getMessage());
+			}
+
+		}
+	}
+
+	@Override
+	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+	public void insertAccountBucketTransactive(AccountBucket accountBucket)
+			throws AccountServiceException {
+		if (accountBucket == null) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.CannotFindAccountBucket
+							.toString());
+		}
+		if (accountBucket.getAccount() == null
+				|| accountPersistService.select(accountBucket.getAccount()
+						.getId()) == null) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.CannotFindAccount.toString());
+		}
+		accountBucketService.insert(accountBucket);
+		AccountBucket abc = new AccountBucket();
+		abc.setAccount(new Account());
+		try {
+			ReflectHelper.setValueByFieldName(abc.getAccount(), "id",
+					accountBucket.getAccount().getId());
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			throw new AccountServiceException(e.getMessage());
+		}
+		int c = accountBucketService.count(abc);
+		if (c > 1) {
+			throw new AccountServiceException(
+					AccountServiceExceptionEnum.RepetitionAccountBucket
+							.toString());
+		}
+	}
 }

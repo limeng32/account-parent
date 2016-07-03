@@ -1,6 +1,7 @@
 package limeng32.mirage.account.service;
 
 import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.AccountBucket;
 import limeng32.mirage.account.persist.LoginLog;
 
 public interface AccountService {
@@ -30,6 +31,12 @@ public interface AccountService {
 
 	void insertAccountTransactive(Account account)
 			throws AccountServiceException;
+
+	void insertAccountBucketTransactive(AccountBucket accountBucket)
+			throws AccountServiceException;
+
+	void updateAccountBucketTransactive(int accountBucketId,
+			AccountBucket accountBucket) throws AccountServiceException;
 
 	void insertLoginLogTransactive(LoginLog loginLog)
 			throws AccountServiceException;
