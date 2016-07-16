@@ -60,6 +60,10 @@ public class Account extends PojoSupport<Account> implements Serializable {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public java.lang.String getName() {
 		return name;
 	}

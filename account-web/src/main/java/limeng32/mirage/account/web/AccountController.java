@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import limeng32.mirage.account.persist.Account;
+import limeng32.mirage.account.persist.AccountBucket;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
+import limeng32.mirage.account.service.AccountServiceException;
 import limeng32.mirage.account.service.AccountServiceExceptionEnum;
 import limeng32.mirage.account.service.AliyunForAccount;
 import limeng32.mirage.util.upload.UploadNamingPolicy;
@@ -109,7 +111,51 @@ public class AccountController {
 			result.setStatus(1);
 			result.setType("ajax");
 			result.setName(file.getOriginalFilename());
-			result.setUrl(aliyun.ossUrl(fileName));
+			String portraitURL = aliyun.ossUrl(fileName);
+			result.setUrl(portraitURL);
+
+			AccountBucket ab = new AccountBucket();
+			ab.setPortrait(portraitURL);
+			Integer accountToken = null;
+			try {
+				accountToken = Integer.parseInt(request.getSession()
+						.getAttribute("accountToken").toString());
+			} catch (Exception e) {
+				result.setStatus(0);
+				result.setMessage(AccountServiceExceptionEnum.NoLogin
+						.description());
+				mm.addAttribute("_content", result);
+				return AccountSignUpController.UNIQUE_VIEW_NAME;
+			}
+			Account account = accountPersistService.select(accountToken);
+			if (account == null) {
+				result.setStatus(0);
+				result.setMessage("用户未登录");
+				mm.addAttribute("_content", result);
+				return AccountSignUpController.UNIQUE_VIEW_NAME;
+			}
+			accountPersistService.loadAccountBucket(account,
+					new AccountBucket());
+			if (account.getAccountBucket().size() == 0) {
+				ab.setAccount(account);
+				try {
+					accountService.insertAccountBucketTransactive(ab);
+				} catch (AccountServiceException e) {
+					response.sendError(400, e.getMessage());
+				}
+			} else {
+				AccountBucket[] accountBuckets = account.getAccountBucket()
+						.toArray(
+								new AccountBucket[account.getAccountBucket()
+										.size()]);
+				ab.setId(accountBuckets[0].getId());
+				ab.setAccount(account);
+				try {
+					accountService.updateAccountBucketTransactive(ab);
+				} catch (AccountServiceException e) {
+					response.sendError(400, e.getMessage());
+				}
+			}
 		} else {
 			result.setStatus(0);
 			result.setMessage("上传失败！");

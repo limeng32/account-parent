@@ -9,7 +9,7 @@ public enum AccountServiceExceptionEnum {
 			"您的邮箱已经注册过，无法再次注册"), CannotFindLoginLog("您的帐号找不到登录日志，现在无法登录"), FailedToInsertLoginLog(
 			"为新帐号增加登录日志时发生异常"), CannotFindAccount("无法找到帐号"), ConnotUpdateAccountBucket(
 			"无法更新帐号的扩展内容"), CannotFindAccountBucket("无法找到帐号的扩展内容"), RepetitionAccountBucket(
-			"这个帐号已经拥有了扩展内容");
+			"这个帐号已经拥有了扩展内容"), NoLogin("您还没有登录");
 
 	private final String description;
 

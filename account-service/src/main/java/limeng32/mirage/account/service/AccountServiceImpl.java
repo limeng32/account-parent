@@ -14,7 +14,6 @@ import limeng32.mirage.account.persist.AccountBucketService;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.persist.LoginLog;
 import limeng32.mirage.account.persist.LoginLogService;
-import limeng32.mybatis.mybatisPlugin.util.ReflectHelper;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -289,9 +288,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(rollbackFor = { AccountServiceException.class }, readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-	public void updateAccountBucketTransactive(int accountBucketId,
-			AccountBucket accountBucket) throws AccountServiceException {
-		if (accountBucket == null || accountBucketId <= 0) {
+	public void updateAccountBucketTransactive(AccountBucket accountBucket)
+			throws AccountServiceException {
+		if (accountBucket == null || accountBucket.getId() == null) {
 			throw new AccountServiceException(
 					AccountServiceExceptionEnum.CannotFindAccountBucket
 							.toString());
@@ -304,21 +303,17 @@ public class AccountServiceImpl implements AccountService {
 		}
 		Integer temp = accountBucket.getId();
 		try {
-			ReflectHelper.setValueByFieldName(accountBucket, "id",
-					accountBucketId);
 			if (accountBucketService.update(accountBucket) != 1) {
 				throw new AccountServiceException(
 						AccountServiceExceptionEnum.ConnotUpdateAccountBucket
 								.toString());
 			}
-		} catch (SecurityException | NoSuchFieldException
-				| IllegalArgumentException | IllegalAccessException e) {
+		} catch (SecurityException | IllegalArgumentException e) {
 			throw new AccountServiceException(e.getMessage());
 		} finally {
 			try {
-				ReflectHelper.setValueByFieldName(accountBucket, "id", temp);
-			} catch (SecurityException | NoSuchFieldException
-					| IllegalArgumentException | IllegalAccessException e1) {
+				accountBucket.setId(temp);
+			} catch (SecurityException | IllegalArgumentException e1) {
 				throw new AccountServiceException(e1.getMessage());
 			}
 
@@ -344,10 +339,8 @@ public class AccountServiceImpl implements AccountService {
 		AccountBucket abc = new AccountBucket();
 		abc.setAccount(new Account());
 		try {
-			ReflectHelper.setValueByFieldName(abc.getAccount(), "id",
-					accountBucket.getAccount().getId());
-		} catch (SecurityException | NoSuchFieldException
-				| IllegalArgumentException | IllegalAccessException e) {
+			abc.getAccount().setId(accountBucket.getAccount().getId());
+		} catch (SecurityException | IllegalArgumentException e) {
 			throw new AccountServiceException(e.getMessage());
 		}
 		int c = accountBucketService.count(abc);

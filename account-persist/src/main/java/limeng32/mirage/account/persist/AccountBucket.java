@@ -27,6 +27,10 @@ public class AccountBucket extends PojoSupport<AccountBucket> implements
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public java.lang.String getPortrait() {
 		return portrait;
 	}

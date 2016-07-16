@@ -35,8 +35,8 @@ public interface AccountService {
 	void insertAccountBucketTransactive(AccountBucket accountBucket)
 			throws AccountServiceException;
 
-	void updateAccountBucketTransactive(int accountBucketId,
-			AccountBucket accountBucket) throws AccountServiceException;
+	void updateAccountBucketTransactive(AccountBucket accountBucket)
+			throws AccountServiceException;
 
 	void insertLoginLogTransactive(LoginLog loginLog)
 			throws AccountServiceException;

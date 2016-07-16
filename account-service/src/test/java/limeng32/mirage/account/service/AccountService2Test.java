@@ -65,21 +65,25 @@ public class AccountService2Test {
 		AccountBucket ab2 = accountBucketService.select(2);
 		ab2.setPortrait("b.a");
 		try {
-			accountService.updateAccountBucketTransactive(ab2.getId(), ab2);
+			accountService.updateAccountBucketTransactive(ab2);
 		} catch (AccountServiceException e) {
 			e.printStackTrace();
 		}
+		Integer temp = ab2.getId();
 		try {
-			accountService.updateAccountBucketTransactive(0, ab2);
+			ab2.setId(null);
+			accountService.updateAccountBucketTransactive(ab2);
 		} catch (AccountServiceException e1) {
 			Assert.assertEquals(
 					AccountServiceExceptionEnum.CannotFindAccountBucket
 							.toString(), e1.getMessage());
+		} finally {
+			ab2.setId(temp);
 		}
 		Account a2 = accountPersistService.select(1);
 		accountPersistService.delete(a2);
 		try {
-			accountService.updateAccountBucketTransactive(ab2.getId(), ab2);
+			accountService.updateAccountBucketTransactive(ab2);
 		} catch (AccountServiceException e) {
 			Assert.assertEquals(
 					AccountServiceExceptionEnum.CannotFindAccount.toString(),
@@ -109,20 +113,19 @@ public class AccountService2Test {
 		AccountBucket ab2 = accountBucketService.select(2);
 		ab2.setPortrait("b.a");
 		try {
-			ReflectHelper.setValueByFieldName(ab2, "id", null);
+			ReflectHelper.setValueByFieldName(ab2, "id", 2);
 		} catch (SecurityException | NoSuchFieldException
 				| IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		accountBucketService.delete(ab);
 		try {
-			accountService.updateAccountBucketTransactive(2, ab2);
+			accountService.updateAccountBucketTransactive(ab2);
 		} catch (AccountServiceException e) {
 			Assert.assertEquals(
 					AccountServiceExceptionEnum.ConnotUpdateAccountBucket
 							.toString(), e.getMessage());
 		}
-		Assert.assertNull(ab2.getId());
 	}
 
 	@Test
