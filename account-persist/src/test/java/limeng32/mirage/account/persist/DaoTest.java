@@ -312,7 +312,7 @@ public class DaoTest {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b.c");
+		ab.setOriginalPortrait("a.b.c");
 		accountBucketService.insert(ab);
 	}
 
@@ -333,10 +333,10 @@ public class DaoTest {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b.c");
+		ab.setOriginalPortrait("a.b.c");
 		accountBucketService.insert(ab);
 		AccountBucket ab2 = accountBucketService.select(2);
-		ab2.setPortrait("c.b.a");
+		ab2.setOriginalPortrait("c.b.a");
 		accountBucketService.update(ab2);
 	}
 
@@ -356,7 +356,7 @@ public class DaoTest {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b.c");
+		ab.setOriginalPortrait("a.b.c");
 		accountBucketService.insert(ab);
 		Account account = accountPersistService.select(1);
 		accountPersistService.loadAccountBucket(account, new AccountBucket());

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import limeng32.mirage.account.persist.Account;
 import limeng32.mirage.account.persist.AccountBucket;
+import limeng32.mirage.account.persist.AccountBucketService;
 import limeng32.mirage.account.persist.AccountPersistService;
 import limeng32.mirage.account.service.AccountService;
 import limeng32.mirage.account.service.AccountServiceException;
@@ -34,6 +35,9 @@ public class AccountController {
 
 	@Autowired
 	AccountPersistService accountPersistService;
+
+	@Autowired
+	AccountBucketService accountBucketService;
 
 	@Autowired
 	AliyunForAccount aliyun;
@@ -93,9 +97,57 @@ public class AccountController {
 		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
 
+	@RequestMapping(method = { RequestMethod.POST }, value = "/getAccountWithBucket")
+	public String getAccountWithBucket(HttpServletRequest request,
+			HttpServletResponse response, ModelMap mm, int id)
+			throws IOException {
+		Account result = accountPersistService.select(id);
+		accountPersistService.loadAccountBucket(result, new AccountBucket());
+		if (result.getAccountBucket().size() == 0) {
+			AccountBucket newAb = new AccountBucket();
+			newAb.setAccount(result);
+			try {
+				accountService.insertAccountBucketTransactive(newAb);
+			} catch (AccountServiceException e) {
+				response.sendError(400, e.getMessage());
+			}
+		}
+		mm.addAttribute("_content", result);
+		return AccountSignUpController.UNIQUE_VIEW_NAME;
+	}
+
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/editUser")
 	public String editUser(HttpServletRequest request) {
 		return relativePath + "editUser";
+	}
+
+	@RequestMapping(method = { RequestMethod.POST }, value = "/edit/savePortraitModify")
+	public String savePortraitModify(HttpServletRequest request,
+			HttpServletResponse response, AccountBucket accountBucket,
+			String portraitModifyX, String portraitModifyY,
+			String portraitModifyW, String portraitModifyH,
+			String portraitModify, ModelMap mm) throws IOException {
+		Integer accountToken = null;
+		try {
+			accountToken = Integer.parseInt(request.getSession()
+					.getAttribute("accountToken").toString());
+		} catch (Exception e) {
+			response.sendError(400, e.getMessage());
+		}
+		Account account = accountPersistService.select(accountToken);
+		accountBucket.setAccount(account);
+		String _portraitModify = portraitModifyX + "-" + portraitModifyY + "-"
+				+ portraitModifyW + "-" + portraitModifyH + "a";
+		accountBucket.setPortraitModify(_portraitModify);
+		try {
+			accountService.updateAccountBucketTransactive(accountBucket);
+		} catch (AccountServiceException e) {
+			response.sendError(400, e.getMessage());
+		}
+		AccountBucket result = accountBucketService.select(accountBucket
+				.getId());
+		mm.addAttribute("_content", result);
+		return AccountSignUpController.UNIQUE_VIEW_NAME;
 	}
 
 	@RequestMapping(method = { RequestMethod.POST }, value = "/uploadPortrait")
@@ -115,7 +167,7 @@ public class AccountController {
 			result.setUrl(portraitURL);
 
 			AccountBucket ab = new AccountBucket();
-			ab.setPortrait(portraitURL);
+			ab.setOriginalPortrait(portraitURL);
 			Integer accountToken = null;
 			try {
 				accountToken = Integer.parseInt(request.getSession()
@@ -128,12 +180,6 @@ public class AccountController {
 				return AccountSignUpController.UNIQUE_VIEW_NAME;
 			}
 			Account account = accountPersistService.select(accountToken);
-			if (account == null) {
-				result.setStatus(0);
-				result.setMessage("用户未登录");
-				mm.addAttribute("_content", result);
-				return AccountSignUpController.UNIQUE_VIEW_NAME;
-			}
 			accountPersistService.loadAccountBucket(account,
 					new AccountBucket());
 			if (account.getAccountBucket().size() == 0) {

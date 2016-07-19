@@ -17,8 +17,11 @@ public class AccountBucket extends PojoSupport<AccountBucket> implements
 	@FieldMapperAnnotation(dbFieldName = "id", jdbcType = JdbcType.INTEGER, isUniqueKey = true)
 	private Integer id;
 
-	@FieldMapperAnnotation(dbFieldName = "portrait", jdbcType = JdbcType.VARCHAR)
-	private java.lang.String portrait;
+	@FieldMapperAnnotation(dbFieldName = "originalPortrait", jdbcType = JdbcType.VARCHAR)
+	private java.lang.String originalPortrait;
+
+	@FieldMapperAnnotation(dbFieldName = "portraitModify", jdbcType = JdbcType.VARCHAR)
+	private String portraitModify;
 
 	@FieldMapperAnnotation(dbFieldName = "accountId", jdbcType = JdbcType.INTEGER, dbAssociationUniqueKey = "id")
 	private Account account;
@@ -31,12 +34,24 @@ public class AccountBucket extends PojoSupport<AccountBucket> implements
 		this.id = id;
 	}
 
-	public java.lang.String getPortrait() {
-		return portrait;
+	public java.lang.String getOriginalPortrait() {
+		return originalPortrait;
 	}
 
-	public void setPortrait(java.lang.String portrait) {
-		this.portrait = portrait;
+	public void setOriginalPortrait(java.lang.String originalPortrait) {
+		this.originalPortrait = originalPortrait;
+	}
+
+	public String getPortrait() {
+		return originalPortrait + "@" + portraitModify;
+	}
+
+	public String getPortraitModify() {
+		return portraitModify;
+	}
+
+	public void setPortraitModify(String portraitModify) {
+		this.portraitModify = portraitModify;
 	}
 
 	public Account getAccount() {

@@ -60,10 +60,10 @@ public class AccountService2Test {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b");
+		ab.setOriginalPortrait("a.b");
 		accountBucketService.insert(ab);
 		AccountBucket ab2 = accountBucketService.select(2);
-		ab2.setPortrait("b.a");
+		ab2.setOriginalPortrait("b.a");
 		try {
 			accountService.updateAccountBucketTransactive(ab2);
 		} catch (AccountServiceException e) {
@@ -108,10 +108,10 @@ public class AccountService2Test {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b");
+		ab.setOriginalPortrait("a.b");
 		accountBucketService.insert(ab);
 		AccountBucket ab2 = accountBucketService.select(2);
-		ab2.setPortrait("b.a");
+		ab2.setOriginalPortrait("b.a");
 		try {
 			ReflectHelper.setValueByFieldName(ab2, "id", 2);
 		} catch (SecurityException | NoSuchFieldException
@@ -145,7 +145,7 @@ public class AccountService2Test {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b");
+		ab.setOriginalPortrait("a.b");
 		try {
 			accountService.insertAccountBucketTransactive(ab);
 		} catch (AccountServiceException e) {
@@ -187,10 +187,10 @@ public class AccountService2Test {
 		}
 		accountPersistService.insert(a);
 		ab.setAccount(a);
-		ab.setPortrait("a.b");
+		ab.setOriginalPortrait("a.b");
 		Account a2 = accountPersistService.select(1);
 		ab2.setAccount(a2);
-		ab2.setPortrait("a.b");
+		ab2.setOriginalPortrait("a.b");
 		try {
 			accountService.insertAccountBucketTransactive(ab);
 		} catch (AccountServiceException e) {
