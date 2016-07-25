@@ -43,7 +43,11 @@ public class AccountBucket extends PojoSupport<AccountBucket> implements
 	}
 
 	public String getPortrait() {
-		return originalPortrait + "@" + portraitModify;
+		return originalPortrait + "@" + portraitModify + "_160w_160h";
+	}
+	
+	public String getSmallPortrait() {
+		return originalPortrait + "@" + portraitModify + "_30w_30h";
 	}
 
 	public String getPortraitModify() {
