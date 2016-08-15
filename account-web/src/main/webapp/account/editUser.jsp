@@ -10,9 +10,6 @@
 	<script type="text/javascript" src="account/kissyuploader/5.0.0/build/index.js"></script>
 	<link rel="stylesheet" href="//g.alicdn.com/kissy/k/1.4.8/??css/dpl/base-min.css,css/dpl/forms-min.css,button/assets/dpl-min.css">
 	<%@include file="initKissy.jsp" %>
-    <script>
-    KISSY.importStyle('account-front/editUserWrapper.css,kg/uploader/2.0.3/themes/imageUploader/style.css');
-    </script>
 </head>
 <body>
 
