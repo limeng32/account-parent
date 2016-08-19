@@ -15,3 +15,7 @@
 	});
 </script>
 <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
+<script type="text/javascript" src="${resourceRoot }/core/build/jsonx/jsonx-min.js"></script>
+<script type="text/javascript" src="${resourceRoot }/core/build/smartPath/smartPath-min.js"></script>
+<script type="text/javascript" src="${resourceRoot }/core/build/authIdentify/index-min.js"></script>
+<script type="text/javascript" src="${resourceRoot }/core/build/callbackDialog/index-min.js"></script>

@@ -25,6 +25,7 @@
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
 		<javax.servlet-api.version>3.0.1</javax.servlet-api.version>
 		<fastjson.version>1.2.7</fastjson.version>
+		<core-parent.version>0.0.1-SNAPSHOT</core-parent.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -290,5 +291,6 @@
 		<module>account-captcha</module>
 		<module>account-service</module>
 		<module>account-web</module>
+		<module>account-web-dist</module>
 	</modules>
 </project>
