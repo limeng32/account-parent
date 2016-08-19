@@ -204,4 +204,30 @@ public class AccountService2Test {
 							.toString(), e.getMessage());
 		}
 	}
+
+	/** 测试mybatis自带的缓存功能 */
+	@Test
+	@IfProfileValue(name = "VOLATILE", value = "true")
+	@DatabaseSetup(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/AccountService2Test.testCache.xml")
+	@ExpectedDatabase(assertionMode = DatabaseAssertionMode.NON_STRICT, value = "/limeng32/mirage/account/service/AccountService2Test.testCache.result.xml")
+	@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = "/limeng32/mirage/account/service/AccountService2Test.testCache.xml")
+	public void testCache() {
+		Account a = new Account();
+		a.setId(1);
+		a.setName("ann");
+		a.setEmail("ann@live.cn");
+		a.setPassword("asd");
+		accountPersistService.insert(a);
+
+		Account ac = new Account();
+		ac.setEmail("ann@live.cn");
+		ac.setPassword("asd");
+		int count = accountPersistService.count(ac);
+		Assert.assertEquals(1, count);
+		Account ac2 = new Account();
+		ac2.setEmail("ann@live.cn");
+		ac2.setPassword("qwe");
+		int count2 = accountPersistService.count(ac2);
+		Assert.assertEquals(0, count2);
+	}
 }
